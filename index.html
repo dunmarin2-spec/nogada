@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>노가다의 신 - 현장 인력 매칭</title>
+    <style>
+        body { font-family: 'Malgun Gothic', sans-serif; margin: 0; padding: 60px 0 90px 0; background: #f0f2f5; }
+        
+        /* 상단 카카오페이 수익 바 (형님 링크 적용) */
+        .kakao-pay-bar {
+            position: fixed; top: 0; width: 100%; height: 55px;
+            background: #fee500; color: #3c1e1e; font-weight: bold;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; z-index: 1000; box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            animation: bounce 2s infinite;
+        }
+        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-3px); } }
+
+        /* 일자리 리스트 디자인 */
+        .container { padding: 10px; }
+        .job-card {
+            background: white; margin-bottom: 15px; padding: 20px;
+            border-radius: 15px; border-left: 8px solid #2196F3;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+        .job-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .job-title { font-size: 20px; font-weight: 800; color: #1a1a1a; }
+        .status-tag { background: #ff4757; color: white; padding: 3px 8px; border-radius: 5px; font-size: 12px; }
+        
+        .job-detail { color: #444; font-size: 15px; line-height: 1.7; margin-bottom: 15px; }
+        .highlight { color: #2196F3; font-weight: bold; }
+
+        .btn-group { display: flex; gap: 10px; }
+        .btn {
+            flex: 1; padding: 12px; text-align: center; text-decoration: none;
+            border-radius: 8px; font-weight: bold; font-size: 15px;
+        }
+        .btn-call { background: #2196F3; color: white; }
+        .btn-chat { background: #4CAF50; color: white; }
+
+        /* 하단 쿠팡 파트너스 배너 (형님 안전화 링크 적용) */
+        .coupang-footer {
+            position: fixed; bottom: 0; width: 100%; height: 85px;
+            background: #ffffff; border-top: 3px solid #fd7e14;
+            display: flex; align-items: center; padding: 0 15px;
+            box-sizing: border-box; cursor: pointer; z-index: 1000;
+        }
+        .ad-img { width: 50px; height: 50px; background: #eee; border-radius: 5px; margin-right: 12px; }
+        .ad-content { flex: 1; }
+        .ad-title { font-size: 14px; color: #111; font-weight: bold; margin-bottom: 3px; }
+        .ad-desc { font-size: 12px; color: #666; }
+        .ad-price { color: #fd7e14; font-weight: 800; font-size: 14px; }
+    </style>
+</head>
+<body>
+
+    <div class="kakao-pay-bar" onclick="location.href='https://qr.kakaopay.com/FRK8J0SAD'">
+        💰 [급구] 내일 일자리 상단 노출권 (클릭하여 커피 쏘기)
+    </div>
+
+    <div class="container">
+        <div class="job-card">
+            <div class="job-header">
+                <div class="job-title">🚧 [강남] 신축현장 자재정리</div>
+                <div class="status-tag">모집중</div>
+            </div>
+            <div class="job-detail">
+                일당: <span class="highlight">185,000원</span> (중식 제공)<br>
+                시간: 07:00 ~ 16:30 (퇴근 칼같음)<br>
+                준비물: 안전화, 장갑 (없으면 아래 배너 클릭)
+            </div>
+            <div class="btn-group">
+                <a href="tel:010-0000-0000" class="btn btn-call">📞 바로 전화하기</a>
+            </div>
+        </div>
+
+        <div class="job-card" style="border-left-color: #ff9f43;">
+            <div class="job-header">
+                <div class="job-title">🏗️ [용인] 물류창고 곰방</div>
+                <div class="status-tag" style="background: #ff9f43;">긴급</div>
+            </div>
+            <div class="job-detail">
+                일당: <span class="highlight">220,000원</span><br>
+                시간: 08:00 ~ 16:00<br>
+                특이사항: 층당 추가수당 협의 가능
+            </div>
+            <div class="btn-group">
+                <a href="https://open.kakao.com/o/형님채팅방" class="btn btn-chat">💬 오픈채팅 지원</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="coupang-footer" onclick="window.open('https://link.coupang.com/a/ebozHo')">
+        <div class="ad-img"><img src="https://img.icons8.com/color/96/safety-boot.png" width="50"></div>
+        <div class="ad-content">
+            <div class="ad-title">현장 나갈 때 무릎 아프시죠?</div>
+            <div class="ad-desc">가볍고 튼튼한 쿠션 안전화 - 내일 도착!</div>
+            <div class="ad-price">쿠팡 최저가 확인하기 ></div>
+        </div>
+    </div>
+
+</body>
+</html>
