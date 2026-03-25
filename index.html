@@ -7,22 +7,30 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
     <style>
-        body { font-family: 'Malgun Gothic', sans-serif; margin: 0; padding: 120px 0 90px 0; background: #f0f2f5; }
-        /* 상단 카카오페이 바 */
-        .kakao-bar { position: fixed; top: 0; width: 100%; height: 55px; background: #fee500; color: #3c1e1e; font-weight: bold; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 1000; box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
-        /* 입력 상자 */
-        .reg-box { position: fixed; top: 55px; width: 100%; background: white; padding: 12px; box-sizing: border-box; border-bottom: 2px solid #ddd; z-index: 999; display: flex; gap: 8px; }
-        input { flex: 1; padding: 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 14px; outline: none; }
-        .btn-reg { background: #2196F3; color: white; border: none; padding: 10px 18px; border-radius: 8px; font-weight: bold; cursor: pointer; }
-        /* 일자리 리스트 */
+        body { font-family: 'Malgun Gothic', sans-serif; margin: 0; padding: 150px 0 90px 0; background: #f0f2f5; }
+        /* 상단 바 */
+        .kakao-bar { position: fixed; top: 0; width: 100%; height: 50px; background: #fee500; color: #3c1e1e; font-weight: bold; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 1000; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        
+        /* 업그레이드된 입력 상자 (두 줄) */
+        .reg-box { position: fixed; top: 50px; width: 100%; background: white; padding: 12px; box-sizing: border-box; border-bottom: 2px solid #ddd; z-index: 999; display: flex; flex-direction: column; gap: 8px; }
+        .input-row { display: flex; gap: 8px; }
+        input { flex: 1; padding: 10px; border: 1px solid #ccc; border-radius: 5px; font-size: 14px; outline: none; }
+        .btn-reg { background: #2196F3; color: white; border: none; padding: 10px 15px; border-radius: 5px; font-weight: bold; cursor: pointer; white-space: nowrap; }
+        
+        /* 일자리 리스트 & 삭제 버튼 */
         .container { padding: 10px; }
-        .card { background: white; margin-bottom: 15px; padding: 18px; border-radius: 15px; border-left: 8px solid #2196F3; box-shadow: 0 4px 10px rgba(0,0,0,0.08); }
-        .card b { font-size: 18px; color: #1a1a1a; display: block; margin-bottom: 5px; }
-        .card p { margin: 4px 0; color: #555; font-size: 15px; }
+        .card { position: relative; background: white; margin-bottom: 12px; padding: 15px; border-radius: 12px; border-left: 6px solid #2196F3; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        .card b { font-size: 17px; color: #1a1a1a; display: block; margin-bottom: 5px; padding-right: 30px; }
+        .card p { margin: 4px 0; color: #555; font-size: 14px; }
         .time { font-size: 12px; color: #999; margin-top: 8px; }
+        
+        /* 삭제 버튼 (X 표시) */
+        .btn-delete { position: absolute; top: 15px; right: 15px; background: none; border: none; color: #ccc; font-size: 18px; cursor: pointer; }
+        .btn-delete:hover { color: #ff4757; }
+
         /* 하단 쿠팡 배너 */
-        .coupang-footer { position: fixed; bottom: 0; width: 100%; height: 85px; background: white; border-top: 3px solid #fd7e14; display: flex; align-items: center; padding: 0 20px; box-sizing: border-box; cursor: pointer; z-index: 1000; }
-        .ad-btn { background: #fd7e14; color: white; padding: 8px 15px; border-radius: 6px; font-size: 13px; font-weight: bold; margin-left: auto; }
+        .coupang-footer { position: fixed; bottom: 0; width: 100%; height: 80px; background: white; border-top: 3px solid #fd7e14; display: flex; align-items: center; padding: 0 15px; box-sizing: border-box; cursor: pointer; z-index: 1000; }
+        .ad-btn { background: #fd7e14; color: white; padding: 8px 12px; border-radius: 5px; font-size: 12px; font-weight: bold; margin-left: auto; }
     </style>
 </head>
 <body>
@@ -32,9 +40,15 @@
     </div>
 
     <div class="reg-box">
-        <input type="text" id="loc" placeholder="현장(예: 강남)">
-        <input type="text" id="pay" placeholder="단가(예: 19만)">
-        <button class="btn-reg" onclick="addJob()">등록</button>
+        <div class="input-row">
+            <input type="text" id="loc" placeholder="현장(예: 강남)">
+            <input type="text" id="pay" placeholder="단가(예: 19만)">
+        </div>
+        <div class="input-row">
+            <input type="tel" id="tel" placeholder="연락처(010...)">
+            <input type="password" id="pwd" placeholder="삭제비번(4자리)">
+            <button class="btn-reg" onclick="addJob()">등록</button>
+        </div>
     </div>
 
     <div class="container" id="job-list"></div>
@@ -59,44 +73,73 @@
             appId: "1:479523158859:web:582940fdbc348b251306ce"
         };
 
-        // Firebase 초기화
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
-        // [함수] 일자리 데이터 저장
+        // 1. 일자리 데이터 저장 (연락처, 비밀번호 포함)
         function addJob() {
             const loc = document.getElementById('loc').value;
             const pay = document.getElementById('pay').value;
-            if(loc && pay) {
+            const tel = document.getElementById('tel').value;
+            const pwd = document.getElementById('pwd').value;
+
+            if(loc && pay && tel && pwd) {
                 db.ref('jobs').push({
                     loc: loc,
                     pay: pay,
+                    tel: tel,
+                    pwd: pwd,
                     time: new Date().toLocaleString()
                 });
+                
+                // 입력칸 초기화
                 document.getElementById('loc').value = '';
                 document.getElementById('pay').value = '';
-                alert('일자리가 등록되었습니다!');
+                document.getElementById('tel').value = '';
+                document.getElementById('pwd').value = '';
+                alert('일자리가 성공적으로 등록되었습니다!');
             } else {
-                alert('현장과 단가를 모두 입력해주세요!');
+                alert('현장, 단가, 연락처, 비밀번호를 모두 입력해주세요!');
             }
         }
 
-        // [함수] 실시간 데이터 읽어오기
+        // 2. 일자리 삭제 기능 (비밀번호 확인)
+        function deleteJob(jobKey, correctPwd) {
+            const inputPwd = prompt('글을 삭제하시려면 설정한 비밀번호를 입력하세요.');
+            
+            if (inputPwd === null) return; // 취소 버튼 눌렀을 때
+            
+            if (inputPwd === correctPwd) {
+                db.ref('jobs').child(jobKey).remove(); // DB에서 진짜 삭제
+                alert('삭제 완료되었습니다.');
+            } else {
+                alert('비밀번호가 틀렸습니다!');
+            }
+        }
+
+        // 3. 실시간 데이터 읽어오기 및 화면에 그리기
         db.ref('jobs').on('value', (snapshot) => {
             const listArea = document.getElementById('job-list');
-            listArea.innerHTML = ''; // 초기화 후 다시 그리기
+            listArea.innerHTML = ''; 
             
             snapshot.forEach((child) => {
                 const data = child.val();
+                const key = child.key; // 고유 번호 (삭제할 때 필요함)
+                
                 const cardHtml = `
                     <div class="card">
                         <b>🚧 [${data.loc}] 현장 긴급구인</b>
+                        <button class="btn-delete" onclick="deleteJob('${key}', '${data.pwd}')">✖</button>
                         <p>일당: <span style="color:#2196F3; font-weight:bold;">${data.pay}</span></p>
                         <p class="time">등록일시: ${data.time}</p>
-                        <button class="btn-reg" style="width:100%; margin-top:10px; background:#4CAF50;" onclick="alert('전화연결 로직은 추후 업데이트 예정입니다!')">연락처 확인</button>
+                        
+                        <div style="display: flex; gap: 8px; margin-top: 10px;">
+                            <a href="tel:${data.tel}" class="btn-reg" style="flex: 1; text-align: center; text-decoration: none; background: #4CAF50;">📞 전화연결</a>
+                            <a href="sms:${data.tel}" class="btn-reg" style="flex: 1; text-align: center; text-decoration: none; background: #ff9800;">💬 문자지원</a>
+                        </div>
                     </div>
                 `;
-                listArea.insertAdjacentHTML('afterbegin', cardHtml); // 최신글 상단 배치
+                listArea.insertAdjacentHTML('afterbegin', cardHtml); 
             });
         });
     </script>
