@@ -3,20 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>노가다의 신 - 실시간 인력매칭</title>
+    <title>노가다의 신 - 찬둥 에디션</title>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
     <style>
+        /* 💡 필기체 스타일을 위한 폰트 추가 */
+        @import url('https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&display=swap');
+
         /* 상단 입력창이 커진 만큼 본문이 가려지지 않게 여백(padding) 조정 */
         body { font-family: 'Malgun Gothic', sans-serif; margin: 0; padding: 220px 0 90px 0; background: #f0f2f5; }
         
+        /* 💡 찬둥의 필기체 시그니처 스타일 */
+        .chan-doong-signature { font-family: 'Nanum Pen Script', cursive; font-size: 20px; color: #3c1e1e; transform: rotate(-10deg); margin-bottom: -15px; z-index: 1100; }
+
         /* 상단 바 */
-        .kakao-bar { position: fixed; top: 0; width: 100%; height: 50px; background: #fee500; color: #3c1e1e; font-weight: bold; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 1000; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .kakao-bar { position: fixed; top: 0; width: 100%; height: 60px; background: #fee500; color: #3c1e1e; font-weight: bold; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; z-index: 1000; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
         
         /* 🌟 모바일 맞춤형 3줄짜리 큼직한 입력 상자 */
-        .reg-box { position: fixed; top: 50px; width: 100%; background: white; padding: 12px; box-sizing: border-box; border-bottom: 2px solid #ddd; z-index: 999; display: flex; flex-direction: column; gap: 8px; }
+        .reg-box { position: fixed; top: 60px; width: 100%; background: white; padding: 12px; box-sizing: border-box; border-bottom: 2px solid #ddd; z-index: 999; display: flex; flex-direction: column; gap: 8px; }
         .input-row { display: flex; gap: 8px; width: 100%; }
-        /* min-width: 0과 box-sizing 추가로 화면 밖으로 삐져나가는 현상 원천 차단 */
         input { flex: 1; padding: 12px; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; outline: none; box-sizing: border-box; min-width: 0; }
         .btn-reg { flex: 1; background: #2196F3; color: white; border: none; padding: 12px; border-radius: 6px; font-size: 15px; font-weight: bold; cursor: pointer; box-sizing: border-box; }
         
@@ -40,7 +45,8 @@
 <body>
 
     <div class="kakao-bar" onclick="location.href='https://qr.kakaopay.com/FRK8J0SAD'">
-        💰 [긴급] 일자리 상단 노출권 구매/후원 (클릭)
+        <span class="chan-doong-signature">찬둥의</span>
+        <span>💰 [긴급] 일자리 상단 노출권 구매/후원 (클릭)</span>
     </div>
 
     <div class="reg-box">
@@ -69,7 +75,7 @@
     </div>
 
     <script>
-        // 형님의 Firebase 설정
+        // 형님의 Firebase 설정 (유지)
         const firebaseConfig = {
             apiKey: "AIzaSyDGip6cFRf2Ljz3_e7QaocWBGGbwqTe3pw",
             authDomain: "nogada-db.firebaseapp.com",
@@ -83,7 +89,6 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
-        // 1. 일자리 데이터 저장
         function addJob() {
             const jobType = document.getElementById('jobType').value;
             const loc = document.getElementById('loc').value;
@@ -100,8 +105,6 @@
                     pwd: pwd,
                     time: new Date().toLocaleString()
                 });
-                
-                // 입력칸 초기화
                 document.getElementById('jobType').value = '';
                 document.getElementById('loc').value = '';
                 document.getElementById('pay').value = '';
@@ -113,12 +116,9 @@
             }
         }
 
-        // 2. 일자리 삭제 기능
         function deleteJob(jobKey, correctPwd) {
             const inputPwd = prompt('글을 삭제하시려면 설정한 비밀번호를 입력하세요.');
-            
             if (inputPwd === null) return; 
-            
             if (inputPwd === correctPwd) {
                 db.ref('jobs').child(jobKey).remove(); 
                 alert('삭제 완료되었습니다.');
@@ -127,24 +127,19 @@
             }
         }
 
-        // 3. 실시간 데이터 읽어오기
         db.ref('jobs').on('value', (snapshot) => {
             const listArea = document.getElementById('job-list');
             listArea.innerHTML = ''; 
-            
             snapshot.forEach((child) => {
                 const data = child.val();
                 const key = child.key; 
-                
                 const displayType = data.type ? data.type : "미지정";
-                
                 const cardHtml = `
                     <div class="card">
                         <b><span class="type-badge">[${displayType}]</span> 🚧 ${data.loc}</b>
                         <button class="btn-delete" onclick="deleteJob('${key}', '${data.pwd}')">✖</button>
                         <p>일당: <span style="color:#2196F3; font-weight:bold;">${data.pay}</span></p>
                         <p class="time">등록일시: ${data.time}</p>
-                        
                         <div style="display: flex; gap: 8px; margin-top: 10px;">
                             <a href="tel:${data.tel}" class="btn-reg" style="flex: 1; text-align: center; text-decoration: none; background: #4CAF50;">📞 전화연결</a>
                             <a href="sms:${data.tel}" class="btn-reg" style="flex: 1; text-align: center; text-decoration: none; background: #ff9800;">💬 문자지원</a>
