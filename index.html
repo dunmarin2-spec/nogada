@@ -232,7 +232,12 @@
                                 <button onclick="deleteJob('${data.key}', '${data.pwd}')" class="btn-delete">✕</button>
                             </div>
                         </div>
-                        <b><span class="id-badge">${data.shortId}</span><span class="loc-badge">${data.region || '전국'}</span><span class="type-badge">${data.type}</span> ${data.loc} ${isNew ? '<span class="new-badge">NEW</span>' : ''}</b>
+                        <b>
+    <span class="id-badge">ID:${data.shortId}</span> 
+    <span class="loc-badge">${data.region || '전국'}</span>
+    <span class="type-badge">${data.type}</span> 
+    ${data.loc} ${isNew ? '<span class="new-badge">NEW</span>' : ''}
+</b>
                         <div style="margin: 8px 0; display:flex; align-items:center; gap:6px;">
                             <span style="font-size:20px; color:#2196F3; font-weight:900;">${data.pay}</span>
                             <a href="https://m.map.naver.com/search2/search.naver?query=${encodeURIComponent((data.region || '') + ' ' + data.loc)}" target="_blank" class="btn-sub btn-map">📍 지도</a>
