@@ -10,81 +10,101 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Pretendard:wght@900&display=swap');
 
-        /* 💡 수정 포인트: 타이틀 바뀐 높이에 맞춰 본문 여백 재조정 */
-        body { font-family: 'Malgun Gothic', sans-serif; margin: 0; padding: 265px 0 90px 0; background: #f0f2f5; }
+        /* 상단 고정 영역이 많아져서 본문 여백을 330px로 늘림 */
+        body { font-family: 'Malgun Gothic', sans-serif; margin: 0; padding: 330px 0 90px 0; background: #f0f2f5; }
         
-        /* 실시간 단가 전광판 */
         .ticker-bar { position: fixed; top: 0; width: 100%; height: 25px; background: #1a1a1a; color: #00ff00; font-size: 11px; display: flex; align-items: center; overflow: hidden; z-index: 1001; }
         .ticker-text { white-space: nowrap; animation: ticker 25s linear infinite; font-weight: bold; }
         @keyframes ticker { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
 
-        /* 💡 수정 포인트: 깔끔하고 강렬한 앱 타이틀 바 */
-        .app-header { position: fixed; top: 25px; width: 100%; height: 65px; background: #fee500; color: #3c1e1e; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 1000; box-shadow: 0 2px 8px rgba(0,0,0,0.15); cursor: pointer; }
-        .app-title { font-family: 'Pretendard', sans-serif; font-size: 24px; font-weight: 900; letter-spacing: -1px; }
-        .app-subtitle { font-size: 10px; font-weight: bold; opacity: 0.7; margin-top: -2px; }
-        
-        /* 입력 상자 */
-        .reg-box { position: fixed; top: 90px; width: 100%; height: 175px; background: white; padding: 12px; box-sizing: border-box; border-bottom: 2px solid #ddd; z-index: 999; display: flex; flex-direction: column; gap: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
-        
-        .input-row { display: flex; gap: 6px; width: 100%; }
-        .quick-tags { display: flex; gap: 5px; overflow-x: auto; padding-bottom: 5px; -webkit-overflow-scrolling: touch; }
-        .tag { background: #f8f9fa; padding: 6px 14px; border-radius: 20px; font-size: 11px; color: #666; border: 1px solid #eee; white-space: nowrap; cursor: pointer; font-weight: bold; }
-        .tag.active { background: #2196F3; color: white; border-color: #2196F3; }
+        .app-header { position: fixed; top: 25px; width: 100%; height: 60px; background: #fee500; color: #3c1e1e; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 1000; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        .app-title { font-family: 'Pretendard', sans-serif; font-size: 22px; font-weight: 900; }
 
-        input { flex: 1; padding: 11px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; outline: none; box-sizing: border-box; background: #fafafa; }
-        input:focus { border-color: #2196F3; background: #fff; }
-        .btn-reg { flex: 1; background: #2196F3; color: white; border: none; padding: 11px; border-radius: 8px; font-size: 15px; font-weight: 900; cursor: pointer; }
+        /* 💡 수정 포인트: 지역 필터 바 추가 */
+        .filter-bar { position: fixed; top: 85px; width: 100%; background: #fff; padding: 10px; box-sizing: border-box; z-index: 999; border-bottom: 1px solid #eee; display: flex; gap: 8px; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+        .filter-btn { background: #f1f3f5; border: 1px solid #dee2e6; padding: 6px 15px; border-radius: 20px; font-size: 13px; white-space: nowrap; cursor: pointer; font-weight: bold; }
+        .filter-btn.active { background: #2196F3; color: white; border-color: #2196F3; }
+
+        /* 등록 박스 */
+        .reg-box { position: fixed; top: 138px; width: 100%; background: white; padding: 12px; box-sizing: border-box; border-bottom: 2px solid #ddd; z-index: 998; display: flex; flex-direction: column; gap: 8px; }
+        
+        /* 💡 수정 포인트: 직종 퀵 버튼 (타자 안 쳐도 됨) */
+        .quick-tags { display: flex; gap: 5px; overflow-x: auto; padding-bottom: 2px; }
+        .tag { background: #e9ecef; padding: 5px 12px; border-radius: 6px; font-size: 12px; font-weight: bold; color: #495057; cursor: pointer; white-space: nowrap; }
+        .tag.active { background: #4CAF50; color: white; }
+
+        .input-row { display: flex; gap: 6px; width: 100%; }
+        input, select { flex: 1; padding: 10px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; outline: none; background: #fafafa; }
+        .btn-reg { flex: 1; background: #2196F3; color: white; border: none; padding: 10px; border-radius: 8px; font-size: 15px; font-weight: 900; cursor: pointer; }
         
         .container { padding: 12px; }
         .card { position: relative; background: white; margin-bottom: 16px; padding: 18px; border-radius: 16px; border-left: 8px solid #2196F3; box-shadow: 0 4px 15px rgba(0,0,0,0.07); }
         .card.high-pay { border-left-color: #ff9800; background: #fffdf7; }
         
+        .loc-badge { background: #343a40; color: white; padding: 2px 8px; border-radius: 4px; font-size: 11px; margin-right: 5px; }
         .new-badge { background: #ff4757; color: white; font-size: 10px; padding: 2px 6px; border-radius: 4px; margin-left: 6px; font-weight: 900; }
-        .card b { font-size: 19px; color: #111; display: block; margin-bottom: 10px; }
-        .type-badge { background: #eef2ff; color: #4f46e5; padding: 4px 10px; border-radius: 8px; font-size: 13px; font-weight: 900; margin-right: 4px; }
+        .card b { font-size: 18px; color: #111; display: block; margin-bottom: 10px; }
+        .type-badge { background: #eef2ff; color: #4f46e5; padding: 4px 10px; border-radius: 8px; font-size: 13px; font-weight: 900; }
         
-        .btn-map { background: #fff; border: 1.5px solid #2196F3; color: #2196F3; padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 800; text-decoration: none; display: inline-flex; align-items: center; }
-        .btn-delete { position: absolute; top: 18px; right: 18px; background: #f1f3f5; width: 32px; height: 32px; border-radius: 50%; border: none; color: #adb5bd; cursor: pointer; font-size: 16px; }
+        .btn-map { background: #fff; border: 1.5px solid #2196F3; color: #2196F3; padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 800; text-decoration: none; }
+        .btn-delete { position: absolute; top: 18px; right: 18px; background: #f1f3f5; width: 32px; height: 32px; border-radius: 50%; border: none; color: #adb5bd; cursor: pointer; }
 
         .time { font-size: 11px; color: #999; margin-top: 12px; display: flex; justify-content: space-between; border-top: 1px solid #f8f9fa; padding-top: 10px; }
         
-        .coupang-footer { position: fixed; bottom: 0; width: 100%; height: 80px; background: white; border-top: 3px solid #fd7e14; display: flex; align-items: center; padding: 0 20px; box-sizing: border-box; z-index: 1000; box-shadow: 0 -2px 10px rgba(0,0,0,0.05); }
+        .coupang-footer { position: fixed; bottom: 0; width: 100%; height: 80px; background: white; border-top: 3px solid #fd7e14; display: flex; align-items: center; padding: 0 20px; box-sizing: border-box; z-index: 1000; }
         .ad-btn { background: #fd7e14; color: white; padding: 10px 16px; border-radius: 8px; font-size: 13px; font-weight: 900; margin-left: auto; }
     </style>
 </head>
 <body>
 
     <div class="ticker-bar">
-        <div class="ticker-text">
-            📢 [실시간 현장 단가] 폼맨: 19만~21만 | 곰방: 23만~25만 | 조적: 20만 | 철근: 19만 | 잡부: 15만 | 수도권 현장 인력 급구 중! 안전이 최고입니다! 
-        </div>
+        <div class="ticker-text">📢 [실시간 단가] 폼맨: 19만~21만 | 곰방: 23만~25만 | 수도권 현장 인력 급구 중! 안전이 최고입니다! </div>
     </div>
 
-    <div class="app-header" onclick="location.href='https://qr.kakaopay.com/FRK8J0SAD'">
+    <div class="app-header">
         <div class="app-title">노가다의 신 👷</div>
-        <div class="app-subtitle">실시간 일자리 노출권 구매/후원 (클릭)</div>
+        <div style="font-size:10px; font-weight:bold; opacity:0.6;">전국 실시간 인력 구인/구직</div>
+    </div>
+
+    <div class="filter-bar" id="regionFilter">
+        <div class="filter-btn active" onclick="filterRegion('전체')">전체</div>
+        <div class="filter-btn" onclick="filterRegion('서울')">서울</div>
+        <div class="filter-btn" onclick="filterRegion('경기')">경기</div>
+        <div class="filter-btn" onclick="filterRegion('인천')">인천</div>
+        <div class="filter-btn" onclick="filterRegion('충청/대전')">충청/대전</div>
+        <div class="filter-btn" onclick="filterRegion('경상/부산')">경상/부산</div>
+        <div class="filter-btn" onclick="filterRegion('전라/광주')">전라/광주</div>
+        <div class="filter-btn" onclick="filterRegion('강원/제주')">강원/제주</div>
     </div>
 
     <div class="reg-box">
-        <div class="quick-tags" id="tagList">
-            <div class="tag" onclick="setTag('폼맨')">#폼맨</div>
-            <div class="tag" onclick="setTag('철근')">#철근</div>
-            <div class="tag" onclick="setTag('곰방')">#곰방</div>
-            <div class="tag" onclick="setTag('조적')">#조적</div>
-            <div class="tag" onclick="setTag('잡부')">#잡부</div>
-            <div class="tag" onclick="setTag('비계')">#비계</div>
+        <div class="quick-tags">
+            <div class="tag" onclick="setTag('폼맨')">폼맨</div>
+            <div class="tag" onclick="setTag('철근')">철근</div>
+            <div class="tag" onclick="setTag('곰방')">곰방</div>
+            <div class="tag" onclick="setTag('조적')">조적</div>
+            <div class="tag" onclick="setTag('잡부')">잡부</div>
+            <div class="tag" onclick="setTag('비계')">비계</div>
+            <div class="tag" onclick="setTag('타일')">타일</div>
         </div>
         <div class="input-row">
-            <input type="text" id="jobType" placeholder="직종 직접입력">
-            <input type="text" id="loc" placeholder="현장(예: 강남역)">
+            <select id="regRegion">
+                <option value="">지역선택</option>
+                <option value="서울">서울</option><option value="경기">경기</option>
+                <option value="인천">인천</option><option value="충청/대전">충청/대전</option>
+                <option value="경상/부산">경상/부산</option><option value="전라/광주">전라/광주</option>
+                <option value="강원/제주">강원/제주</option>
+            </select>
+            <input type="text" id="jobType" placeholder="직종 선택/입력">
         </div>
         <div class="input-row">
+            <input type="text" id="loc" placeholder="상세현장(예: 강남역)">
             <input type="text" id="pay" placeholder="단가(예: 19)">
-            <input type="tel" id="tel" placeholder="연락처">
         </div>
         <div class="input-row">
+            <input type="tel" id="tel" placeholder="연락처">
             <input type="password" id="pwd" placeholder="비번4자리">
-            <button class="btn-reg" onclick="addJob()">1초 등록</button>
+            <button class="btn-reg" onclick="addJob()">등록</button>
         </div>
     </div>
 
@@ -93,7 +113,7 @@
     <div class="coupang-footer" onclick="window.open('https://link.coupang.com/a/ebozHo')">
         <div style="flex:1">
             <div style="font-size:15px; color:#fd7e14; font-weight:900;">👟 현장 필수! 발 편한 안전화</div>
-            <div style="font-size:12px; color:#444; font-weight:500;">가성비 끝판왕 모델, 내일 당장 도착!</div>
+            <div style="font-size:12px; color:#444;">가성비 끝판왕 모델, 내일 당장 도착!</div>
         </div>
         <div class="ad-btn">구경하기</div>
     </div>
@@ -108,9 +128,10 @@
             messagingSenderId: "479523158859",
             appId: "1:479523158859:web:582940fdbc348b251306ce"
         };
-
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
+
+        let currentFilter = '전체';
 
         function setTag(val) {
             document.getElementById('jobType').value = val;
@@ -119,30 +140,38 @@
             event.target.classList.add('active');
         }
 
+        function filterRegion(region) {
+            currentFilter = region;
+            const btns = document.querySelectorAll('.filter-btn');
+            btns.forEach(b => b.classList.remove('active'));
+            event.target.classList.add('active');
+            renderJobs();
+        }
+
         function addJob() {
+            const region = document.getElementById('regRegion').value;
             const jobType = document.getElementById('jobType').value;
             const loc = document.getElementById('loc').value;
             let pay = document.getElementById('pay').value;
             const tel = document.getElementById('tel').value;
             const pwd = document.getElementById('pwd').value;
 
-            if(jobType && loc && pay && tel && pwd) {
+            if(region && jobType && loc && pay && tel && pwd) {
                 if(!isNaN(pay)) pay = pay + "만";
                 db.ref('jobs').push({
-                    type: jobType, loc: loc, pay: pay, tel: tel, pwd: pwd,
+                    region, type: jobType, loc, pay, tel, pwd,
                     timestamp: Date.now(), time: new Date().toLocaleString()
                 });
-                ["jobType", "loc", "pay", "tel", "pwd"].forEach(id => document.getElementById(id).value = '');
-                alert('일자리가 등록되었습니다!');
-            } else { alert('빈칸을 모두 채워주세요!'); }
+                alert('등록되었습니다!');
+            } else { alert('지역 포함 모든 칸을 채워주세요!'); }
         }
 
         function deleteJob(jobKey, correctPwd) {
-            const inputPwd = prompt('삭제 비밀번호를 입력하세요.');
+            const inputPwd = prompt('삭제 비밀번호 입력');
             if (inputPwd === correctPwd) {
                 db.ref('jobs').child(jobKey).remove(); 
-                alert('삭제되었습니다.');
-            } else if (inputPwd !== null) { alert('비밀번호가 틀렸습니다!'); }
+                alert('삭제완료');
+            }
         }
 
         function timeSince(date) {
@@ -155,33 +184,46 @@
             return "방금 전";
         }
 
+        let allJobs = [];
         db.ref('jobs').on('value', (snapshot) => {
+            allJobs = [];
+            snapshot.forEach(child => {
+                allJobs.push({ key: child.key, ...child.val() });
+            });
+            renderJobs();
+        });
+
+        function renderJobs() {
             const listArea = document.getElementById('job-list');
-            listArea.innerHTML = ''; 
-            snapshot.forEach((child) => {
-                const data = child.val();
-                const key = child.key; 
+            listArea.innerHTML = '';
+            
+            // 시간순 정렬 (최신순)
+            const filtered = allJobs
+                .filter(job => currentFilter === '전체' || job.region === currentFilter)
+                .reverse();
+
+            filtered.forEach(data => {
                 const isNew = (Date.now() - data.timestamp) < 3600000;
                 const isHighPay = parseInt(data.pay) >= 20;
 
                 const cardHtml = `
                     <div class="card ${isHighPay ? 'high-pay' : ''}">
-                        <button class="btn-delete" onclick="deleteJob('${key}', '${data.pwd}')">✕</button>
-                        <b><span class="type-badge">${data.type}</span> ${data.loc} ${isNew ? '<span class="new-badge">NEW</span>' : ''}</b>
+                        <button class="btn-delete" onclick="deleteJob('${data.key}', '${data.pwd}')">✕</button>
+                        <b><span class="loc-badge">${data.region || '미지정'}</span><span class="type-badge">${data.type}</span> ${data.loc} ${isNew ? '<span class="new-badge">NEW</span>' : ''}</b>
                         <div style="margin: 12px 0; display:flex; align-items:center; gap:12px;">
                             <span style="font-size:24px; color:#2196F3; font-weight:900;">${data.pay}</span>
-                            <a href="https://m.map.naver.com/search2/search.naver?query=${encodeURIComponent(data.loc)}" target="_blank" class="btn-map">📍 현장지도</a>
+                            <a href="https://m.map.naver.com/search2/search.naver?query=${encodeURIComponent(data.region + ' ' + data.loc)}" target="_blank" class="btn-map">📍 현장지도</a>
                         </div>
                         <div style="display: flex; gap: 10px; margin-top: 15px;">
-                            <a href="tel:${data.tel}" class="btn-reg" style="flex: 1.5; text-align: center; text-decoration: none; background: #4CAF50; display:flex; align-items:center; justify-content:center; border-radius:10px;">📞 전화하기</a>
-                            <a href="sms:${data.tel}?body=${encodeURIComponent(data.type + ' 지원합니다.')}" class="btn-reg" style="flex: 1; text-align: center; text-decoration: none; background: #ff9800; display:flex; align-items:center; justify-content:center; border-radius:10px;">문자</a>
+                            <a href="tel:${data.tel}" class="btn-reg" style="flex: 1.5; text-align: center; text-decoration: none; background: #4CAF50; display:flex; align-items:center; justify-content:center;">📞 전화</a>
+                            <a href="sms:${data.tel}?body=${encodeURIComponent(data.type + ' 지원합니다.')}" class="btn-reg" style="flex: 1; text-align: center; text-decoration: none; background: #ff9800; display:flex; align-items:center; justify-content:center;">문자</a>
                         </div>
-                        <div class="time"><span>등록일시: ${data.time}</span><span style="color:#2196F3; font-weight:900;">${timeSince(data.timestamp)}</span></div>
+                        <div class="time"><span>등록: ${data.time}</span><span style="color:#2196F3; font-weight:900;">${timeSince(data.timestamp)}</span></div>
                     </div>
                 `;
-                listArea.insertAdjacentHTML('afterbegin', cardHtml); 
+                listArea.insertAdjacentHTML('beforeend', cardHtml);
             });
-        });
+        }
     </script>
 </body>
 </html>
