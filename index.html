@@ -8,42 +8,56 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
     <style>
-        /* 💡 필기체 스타일을 위한 폰트 추가 */
         @import url('https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&display=swap');
 
-        /* 상단 입력창이 커진 만큼 본문이 가려지지 않게 여백(padding) 조정 */
-        body { font-family: 'Malgun Gothic', sans-serif; margin: 0; padding: 220px 0 90px 0; background: #f0f2f5; }
+        body { font-family: 'Malgun Gothic', sans-serif; margin: 0; padding: 260px 0 90px 0; background: #f0f2f5; }
         
-        /* 💡 찬둥의 필기체 시그니처 스타일 */
+        /* 💡 1. 상단 알림 바 (평균 단가 표시) */
+        .ticker-bar { position: fixed; top: 0; width: 100%; height: 30px; background: #333; color: #00ff00; font-size: 11px; display: flex; align-items: center; overflow: hidden; z-index: 1001; }
+        .ticker-text { white-space: nowrap; animation: ticker 20s linear infinite; font-weight: bold; }
+        @keyframes ticker { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
+
         .chan-doong-signature { font-family: 'Nanum Pen Script', cursive; font-size: 20px; color: #3c1e1e; transform: rotate(-10deg); margin-bottom: -15px; z-index: 1100; }
 
-        /* 상단 바 */
-        .kakao-bar { position: fixed; top: 0; width: 100%; height: 60px; background: #fee500; color: #3c1e1e; font-weight: bold; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; z-index: 1000; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .kakao-bar { position: fixed; top: 30px; width: 100%; height: 60px; background: #fee500; color: #3c1e1e; font-weight: bold; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; z-index: 1000; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
         
-        /* 🌟 모바일 맞춤형 3줄짜리 큼직한 입력 상자 */
-        .reg-box { position: fixed; top: 60px; width: 100%; background: white; padding: 12px; box-sizing: border-box; border-bottom: 2px solid #ddd; z-index: 999; display: flex; flex-direction: column; gap: 8px; }
-        .input-row { display: flex; gap: 8px; width: 100%; }
-        input { flex: 1; padding: 12px; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; outline: none; box-sizing: border-box; min-width: 0; }
-        .btn-reg { flex: 1; background: #2196F3; color: white; border: none; padding: 12px; border-radius: 6px; font-size: 15px; font-weight: bold; cursor: pointer; box-sizing: border-box; }
-        
-        /* 일자리 리스트 & 삭제 버튼 */
-        .container { padding: 10px; }
-        .card { position: relative; background: white; margin-bottom: 12px; padding: 15px; border-radius: 12px; border-left: 6px solid #2196F3; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
-        .card b { font-size: 17px; color: #1a1a1a; display: block; margin-bottom: 5px; padding-right: 30px; }
-        .type-badge { background: #e9ecef; color: #d35400; padding: 3px 6px; border-radius: 4px; font-size: 14px; margin-right: 5px; }
-        .card p { margin: 4px 0; color: #555; font-size: 14px; }
-        .time { font-size: 12px; color: #999; margin-top: 8px; }
-        
-        /* 삭제 버튼 (X 표시) */
-        .btn-delete { position: absolute; top: 15px; right: 15px; background: none; border: none; color: #ccc; font-size: 18px; cursor: pointer; }
-        .btn-delete:hover { color: #ff4757; }
+        /* 💡 2. 입력창 개선 (버튼형 직종 선택 추가) */
+        .reg-box { position: fixed; top: 90px; width: 100%; background: white; padding: 12px; box-sizing: border-box; border-bottom: 2px solid #ddd; z-index: 999; display: flex; flex-direction: column; gap: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .input-row { display: flex; gap: 6px; width: 100%; }
+        .quick-tags { display: flex; gap: 5px; overflow-x: auto; padding-bottom: 5px; -webkit-overflow-scrolling: touch; }
+        .tag { background: #f0f2f5; padding: 5px 12px; border-radius: 20px; font-size: 11px; color: #555; border: 1px solid #ddd; white-space: nowrap; cursor: pointer; }
+        .tag.active { background: #2196F3; color: white; border-color: #2196F3; }
 
-        /* 하단 쿠팡 배너 */
-        .coupang-footer { position: fixed; bottom: 0; width: 100%; height: 80px; background: white; border-top: 3px solid #fd7e14; display: flex; align-items: center; padding: 0 15px; box-sizing: border-box; cursor: pointer; z-index: 1000; }
+        input { flex: 1; padding: 12px; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; outline: none; box-sizing: border-box; }
+        .btn-reg { flex: 1; background: #2196F3; color: white; border: none; padding: 12px; border-radius: 6px; font-size: 15px; font-weight: bold; cursor: pointer; }
+        
+        .container { padding: 10px; }
+        /* 💡 3. 카드 디자인 개선 (고단가 강조 & 신규 뱃지) */
+        .card { position: relative; background: white; margin-bottom: 15px; padding: 15px; border-radius: 15px; border-left: 8px solid #2196F3; box-shadow: 0 4px 12px rgba(0,0,0,0.08); transition: 0.3s; }
+        .card.high-pay { border-left-color: #ff9800; background: #fffcf5; animation: glow 2s infinite; }
+        @keyframes glow { 0% { box-shadow: 0 0 5px rgba(255,152,0,0.2); } 50% { box-shadow: 0 0 15px rgba(255,152,0,0.5); } 100% { box-shadow: 0 0 5px rgba(255,152,0,0.2); } }
+        
+        .new-badge { background: #ff4757; color: white; font-size: 10px; padding: 2px 6px; border-radius: 4px; margin-left: 5px; vertical-align: middle; }
+        .card b { font-size: 18px; color: #1a1a1a; display: block; margin-bottom: 8px; }
+        .type-badge { background: #e3f2fd; color: #1976d2; padding: 3px 8px; border-radius: 6px; font-size: 13px; font-weight: bold; }
+        
+        /* 💡 4. 지도보기 & 편의 기능 버튼 */
+        .btn-map { background: #fff; border: 1px solid #2196F3; color: #2196F3; padding: 5px 10px; border-radius: 6px; font-size: 12px; font-weight: bold; text-decoration: none; display: inline-flex; align-items: center; gap: 4px; }
+        .btn-delete { position: absolute; top: 15px; right: 15px; background: #f8f9fa; width: 30px; height: 30px; border-radius: 50%; border: none; color: #ccc; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+
+        .time { font-size: 11px; color: #aaa; margin-top: 10px; display: flex; justify-content: space-between; align-items: center; }
+        
+        .coupang-footer { position: fixed; bottom: 0; width: 100%; height: 80px; background: white; border-top: 3px solid #fd7e14; display: flex; align-items: center; padding: 0 15px; box-sizing: border-box; z-index: 1000; }
         .ad-btn { background: #fd7e14; color: white; padding: 8px 12px; border-radius: 5px; font-size: 12px; font-weight: bold; margin-left: auto; }
     </style>
 </head>
 <body>
+
+    <div class="ticker-bar">
+        <div class="ticker-text">
+            📢 [실시간 단가] 폼맨: 19만~21만 | 곰방: 23만~25만 | 조적: 20만 | 철근: 19만 | 전 지역 단가 상승 중! 안 전 제 일 ! 
+        </div>
+    </div>
 
     <div class="kakao-bar" onclick="location.href='https://qr.kakaopay.com/FRK8J0SAD'">
         <span class="chan-doong-signature">찬둥의</span>
@@ -51,17 +65,26 @@
     </div>
 
     <div class="reg-box">
-        <div class="input-row">
-            <input type="text" id="jobType" placeholder="직종(예: 폼맨)">
-            <input type="text" id="loc" placeholder="현장(예: 강남)">
+        <div class="quick-tags" id="tagList">
+            <div class="tag" onclick="setTag('폼맨')">#폼맨</div>
+            <div class="tag" onclick="setTag('철근')">#철근</div>
+            <div class="tag" onclick="setTag('곰방')">#곰방</div>
+            <div class="tag" onclick="setTag('조적')">#조적</div>
+            <div class="tag" onclick="setTag('잡부')">#잡부</div>
+            <div class="tag" onclick="setTag('비계')">#비계</div>
+            <div class="tag" onclick="setTag('해체')">#해체</div>
         </div>
         <div class="input-row">
-            <input type="text" id="pay" placeholder="단가(예: 19만)">
-            <input type="tel" id="tel" placeholder="연락처(010...)">
+            <input type="text" id="jobType" placeholder="직종 직접입력">
+            <input type="text" id="loc" placeholder="현장(예: 강남역)">
         </div>
         <div class="input-row">
-            <input type="password" id="pwd" placeholder="삭제비번(4자리)">
-            <button class="btn-reg" onclick="addJob()">등록하기</button>
+            <input type="text" id="pay" placeholder="단가(숫자만, 예: 19)">
+            <input type="tel" id="tel" placeholder="연락처">
+        </div>
+        <div class="input-row">
+            <input type="password" id="pwd" placeholder="비번4자리">
+            <button class="btn-reg" onclick="addJob()">1초 등록하기</button>
         </div>
     </div>
 
@@ -90,42 +113,62 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
+        // 퀵 태그 선택 함수
+        function setTag(val) {
+            document.getElementById('jobType').value = val;
+            const tags = document.querySelectorAll('.tag');
+            tags.forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+
         function addJob() {
             const jobType = document.getElementById('jobType').value;
             const loc = document.getElementById('loc').value;
-            const pay = document.getElementById('pay').value;
+            let pay = document.getElementById('pay').value;
             const tel = document.getElementById('tel').value;
             const pwd = document.getElementById('pwd').value;
 
             if(jobType && loc && pay && tel && pwd) {
+                // 단가 숫자만 있을 경우 '만' 붙여주기
+                if(!isNaN(pay)) pay = pay + "만";
+
                 db.ref('jobs').push({
                     type: jobType,
                     loc: loc,
                     pay: pay,
                     tel: tel,
                     pwd: pwd,
+                    timestamp: Date.now(), // 💡 정렬 및 시간 계산용
                     time: new Date().toLocaleString()
                 });
-                document.getElementById('jobType').value = '';
-                document.getElementById('loc').value = '';
-                document.getElementById('pay').value = '';
-                document.getElementById('tel').value = '';
-                document.getElementById('pwd').value = '';
-                alert('일자리가 성공적으로 등록되었습니다!');
+                
+                // 입력창 초기화
+                ["jobType", "loc", "pay", "tel", "pwd"].forEach(id => document.getElementById(id).value = '');
+                alert('등록되었습니다! 전화 많이 받으세요!');
             } else {
                 alert('빈칸을 모두 채워주세요!');
             }
         }
 
         function deleteJob(jobKey, correctPwd) {
-            const inputPwd = prompt('글을 삭제하시려면 설정한 비밀번호를 입력하세요.');
-            if (inputPwd === null) return; 
+            const inputPwd = prompt('삭제 비밀번호를 입력하세요.');
             if (inputPwd === correctPwd) {
                 db.ref('jobs').child(jobKey).remove(); 
-                alert('삭제 완료되었습니다.');
-            } else {
+                alert('삭제되었습니다.');
+            } else if (inputPwd !== null) {
                 alert('비밀번호가 틀렸습니다!');
             }
+        }
+
+        // 상대 시간 계산 (방금 전, 5분 전 등)
+        function timeSince(date) {
+            const seconds = Math.floor((new Date() - date) / 1000);
+            let interval = seconds / 3600;
+            if (interval > 24) return Math.floor(interval / 24) + "일 전";
+            if (interval > 1) return Math.floor(interval) + "시간 전";
+            interval = seconds / 60;
+            if (interval > 1) return Math.floor(interval) + "분 전";
+            return "방금 전";
         }
 
         db.ref('jobs').on('value', (snapshot) => {
@@ -134,16 +177,32 @@
             snapshot.forEach((child) => {
                 const data = child.val();
                 const key = child.key; 
-                const displayType = data.type ? data.type : "미지정";
+                const isNew = (Date.now() - data.timestamp) < 3600000; // 1시간 이내면 신규
+                const isHighPay = parseInt(data.pay) >= 20; // 20만 이상이면 고단가 강조
+
                 const cardHtml = `
-                    <div class="card">
-                        <b><span class="type-badge">[${displayType}]</span> 🚧 ${data.loc}</b>
-                        <button class="btn-delete" onclick="deleteJob('${key}', '${data.pwd}')">✖</button>
-                        <p>일당: <span style="color:#2196F3; font-weight:bold;">${data.pay}</span></p>
-                        <p class="time">등록일시: ${data.time}</p>
-                        <div style="display: flex; gap: 8px; margin-top: 10px;">
-                            <a href="tel:${data.tel}" class="btn-reg" style="flex: 1; text-align: center; text-decoration: none; background: #4CAF50;">📞 전화연결</a>
-                            <a href="sms:${data.tel}" class="btn-reg" style="flex: 1; text-align: center; text-decoration: none; background: #ff9800;">💬 문자지원</a>
+                    <div class="card ${isHighPay ? 'high-pay' : ''}">
+                        <button class="btn-delete" onclick="deleteJob('${key}', '${data.pwd}')">✕</button>
+                        <b>
+                            <span class="type-badge">${data.type}</span> 
+                            ${data.loc}
+                            ${isNew ? '<span class="new-badge">NEW</span>' : ''}
+                        </b>
+                        
+                        <div style="margin: 10px 0; display:flex; align-items:center; gap:10px;">
+                            <span style="font-size:20px; color:#2196F3; font-weight:900;">${data.pay}</span>
+                            <a href="https://m.map.naver.com/search2/search.naver?query=${encodeURIComponent(data.loc)}" target="_blank" class="btn-map">
+                                📍 지도보기
+                            </a>
+                        </div>
+
+                        <div style="display: flex; gap: 8px; margin-top: 15px;">
+                            <a href="tel:${data.tel}" class="btn-reg" style="flex: 1.5; text-align: center; text-decoration: none; background: #4CAF50; display:flex; align-items:center; justify-content:center; gap:5px;">📞 전화하기</a>
+                            <a href="sms:${data.tel}?body=${encodeURIComponent(data.type + ' 지원합니다.')}" class="btn-reg" style="flex: 1; text-align: center; text-decoration: none; background: #ff9800; display:flex; align-items:center; justify-content:center;">문자</a>
+                        </div>
+                        <div class="time">
+                            <span>등록: ${data.time}</span>
+                            <span style="color:#2196F3; font-weight:bold;">${timeSince(data.timestamp)}</span>
                         </div>
                     </div>
                 `;
