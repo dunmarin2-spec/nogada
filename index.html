@@ -12,70 +12,63 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Pretendard:wght@400;700;900&display=swap');
         
-        /* 전체 레이아웃 (상단이 길어져서 패딩을 340px로 넉넉히 확보) */
-        body { font-family: 'Pretendard', 'Malgun Gothic', sans-serif; margin: 0; padding: 340px 0 90px 0; background: #f0f2f5; }
+        body { font-family: 'Pretendard', sans-serif; margin: 0; padding: 345px 0 90px 0; background: #f0f2f5; }
         
-        /* 1. 실시간 단가 전광판 */
         .ticker-bar { position: fixed; top: 0; width: 100%; height: 25px; background: #1a1a1a; color: #00ff00; font-size: 11px; display: flex; align-items: center; overflow: hidden; z-index: 1001; }
         .ticker-text { white-space: nowrap; animation: ticker 25s linear infinite; font-weight: bold; }
         @keyframes ticker { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
 
-        /* 2. 앱 타이틀 헤더 */
-        .app-header { position: fixed; top: 25px; width: 100%; height: 60px; background: #fee500; color: #3c1e1e; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 1000; box-shadow: 0 2px 8px rgba(0,0,0,0.1); cursor: pointer; }
+        /* 💡 카톡 오픈프로필 연결된 헤더 */
+        .app-header { position: fixed; top: 25px; width: 100%; height: 65px; background: #fee500; color: #3c1e1e; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 1000; box-shadow: 0 2px 10px rgba(0,0,0,0.1); cursor: pointer; }
         .app-title { font-size: 22px; font-weight: 900; }
-        .app-subtitle { font-size: 11px; font-weight: 700; opacity: 0.7; }
+        .app-subtitle { font-size: 11px; font-weight: 800; color: #d32f2f; margin-top: 2px; }
 
-        /* 3. 지역 필터 바 */
-        .filter-bar { position: fixed; top: 85px; width: 100%; background: #fff; padding: 10px; box-sizing: border-box; z-index: 999; border-bottom: 1px solid #eee; display: flex; gap: 8px; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+        .filter-bar { position: fixed; top: 90px; width: 100%; background: #fff; padding: 10px; box-sizing: border-box; z-index: 999; border-bottom: 1px solid #eee; display: flex; gap: 8px; overflow-x: auto; }
         .filter-btn { background: #f1f3f5; border: 1px solid #dee2e6; padding: 6px 15px; border-radius: 20px; font-size: 13px; white-space: nowrap; cursor: pointer; font-weight: bold; }
         .filter-btn.active { background: #2196F3; color: white; border-color: #2196F3; }
 
-        /* 4. 구인글 등록 박스 */
-        .reg-box { position: fixed; top: 138px; width: 100%; background: white; padding: 12px; box-sizing: border-box; border-bottom: 2px solid #ddd; z-index: 998; display: flex; flex-direction: column; gap: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
-        .quick-tags { display: flex; gap: 5px; overflow-x: auto; padding-bottom: 2px; -webkit-overflow-scrolling: touch; }
+        .reg-box { position: fixed; top: 143px; width: 100%; background: white; padding: 12px; box-sizing: border-box; border-bottom: 2px solid #ddd; z-index: 998; display: flex; flex-direction: column; gap: 8px; }
+        .quick-tags { display: flex; gap: 5px; overflow-x: auto; padding-bottom: 2px; }
         .tag { background: #e9ecef; padding: 5px 12px; border-radius: 6px; font-size: 12px; font-weight: bold; color: #495057; cursor: pointer; white-space: nowrap; }
         .tag.active { background: #4CAF50; color: white; }
 
         .input-row { display: flex; gap: 6px; width: 100%; }
-        input, select { flex: 1; padding: 10px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; outline: none; background: #fafafa; font-family: inherit; }
-        input:focus, select:focus { border-color: #2196F3; background: #fff; }
+        input, select { flex: 1; padding: 10px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; outline: none; background: #fafafa; }
         .btn-reg { flex: 1; background: #2196F3; color: white; border: none; padding: 10px; border-radius: 8px; font-size: 15px; font-weight: 900; cursor: pointer; }
         
-        /* 5. 일자리 리스트 (카드 디자인) */
         .container { padding: 12px; }
         .card { position: relative; background: white; margin-bottom: 16px; padding: 18px; border-radius: 16px; border-left: 8px solid #2196F3; box-shadow: 0 4px 15px rgba(0,0,0,0.07); }
         .card.high-pay { border-left-color: #ff9800; background: #fffdf7; }
         
+        /* 💡 공고 번호(ID) 배지 스타일 */
+        .id-badge { background: #6c757d; color: white; padding: 2px 6px; border-radius: 4px; font-size: 10px; font-weight: bold; margin-right: 5px; }
+        
         .loc-badge { background: #343a40; color: white; padding: 3px 8px; border-radius: 4px; font-size: 11px; margin-right: 5px; font-weight: bold; }
         .new-badge { background: #ff4757; color: white; font-size: 10px; padding: 2px 6px; border-radius: 4px; margin-left: 6px; font-weight: 900; }
-        .type-badge { background: #eef2ff; color: #4f46e5; padding: 4px 10px; border-radius: 8px; font-size: 13px; font-weight: 900; margin-right: 5px; }
-        
         .view-count { font-size: 11px; color: #2ecc71; font-weight: bold; display: flex; align-items: center; gap: 3px; }
         .card b { font-size: 18px; color: #111; display: block; margin-bottom: 10px; line-height: 1.4; }
+        .type-badge { background: #eef2ff; color: #4f46e5; padding: 4px 10px; border-radius: 8px; font-size: 13px; font-weight: 900; margin-right: 5px; }
         
-        /* 버튼류 모음 */
-        .btn-sub { background: #fff; border: 1.5px solid #ddd; color: #555; padding: 6px 10px; border-radius: 8px; font-size: 12px; font-weight: 800; text-decoration: none; display: inline-flex; align-items: center; cursor: pointer; }
+        .btn-sub { background: #fff; border: 1.5px solid #ddd; color: #555; padding: 6px 10px; border-radius: 8px; font-size: 12px; font-weight: 800; text-decoration: none; cursor: pointer; }
         .btn-map { border-color: #2196F3; color: #2196F3; }
         .btn-report { background: none; border: none; color: #ff6b6b; font-size: 12px; font-weight: bold; text-decoration: underline; cursor: pointer; padding: 0; }
-        .btn-delete { background: #f1f3f5; width: 28px; height: 28px; border-radius: 50%; border: none; color: #adb5bd; cursor: pointer; margin-left: 10px; font-weight: bold; }
+        .btn-delete { background: #f1f3f5; width: 28px; height: 28px; border-radius: 50%; border: none; color: #adb5bd; cursor: pointer; margin-left: 10px; }
 
         .time { font-size: 11px; color: #999; margin-top: 15px; display: flex; justify-content: space-between; border-top: 1px solid #f8f9fa; padding-top: 12px; align-items: center; }
         
-        /* 6. 쿠팡 하단 배너 */
-        .coupang-footer { position: fixed; bottom: 0; width: 100%; height: 80px; background: white; border-top: 3px solid #fd7e14; display: flex; align-items: center; padding: 0 20px; box-sizing: border-box; z-index: 1000; box-shadow: 0 -2px 10px rgba(0,0,0,0.05); cursor: pointer; }
+        .coupang-footer { position: fixed; bottom: 0; width: 100%; height: 80px; background: white; border-top: 3px solid #fd7e14; display: flex; align-items: center; padding: 0 20px; box-sizing: border-box; z-index: 1000; cursor: pointer; }
         .ad-btn { background: #fd7e14; color: white; padding: 10px 16px; border-radius: 8px; font-size: 13px; font-weight: 900; margin-left: auto; }
     </style>
 </head>
 <body>
 
-<div class="app-header" onclick="location.href='https://qr.kakaopay.com/FRK8J0SAD'">
-        <div class="app-title">노가다의 신 👷</div>
-        <div class="app-subtitle" style="color: #d32f2f;">⚡ [긴급 구인] 일자리 상단 고정 신청 (클릭)</div>
+    <div class="ticker-bar">
+        <div class="ticker-text">📢 [실시간 현황] 입금 후 카톡 보내시면 1분 내로 상단 고정! | 허위 광고 차단 중! 안전제일!</div>
     </div>
 
-    <div class="app-header" onclick="location.href='https://qr.kakaopay.com/FRK8J0SAD'">
+    <div class="app-header" onclick="location.href='https://open.kakao.com/o/sYU57Oni'">
         <div class="app-title">노가다의 신 👷</div>
-        <div class="app-subtitle">⚡ 일자리 상단 노출권 구매/후원 (클릭)</div>
+        <div class="app-subtitle">⚡ [상단 노출/문의] 카톡 1:1 상담 (클릭)</div>
     </div>
 
     <div class="filter-bar" id="regionFilter">
@@ -86,7 +79,6 @@
         <div class="filter-btn" onclick="filterRegion('충청/대전')">충청/대전</div>
         <div class="filter-btn" onclick="filterRegion('경상/부산')">경상/부산</div>
         <div class="filter-btn" onclick="filterRegion('전라/광주')">전라/광주</div>
-        <div class="filter-btn" onclick="filterRegion('강원/제주')">강원/제주</div>
     </div>
 
     <div class="reg-box">
@@ -98,7 +90,6 @@
             <div class="tag" onclick="setTag('잡부')">잡부</div>
             <div class="tag" onclick="setTag('비계')">비계</div>
             <div class="tag" onclick="setTag('타일')">타일</div>
-            <div class="tag" onclick="setTag('전기')">전기</div>
         </div>
         <div class="input-row">
             <select id="regRegion">
@@ -132,7 +123,6 @@
     </div>
 
     <script>
-        // 형님의 Firebase 설정 (기존 데이터 완벽 연동)
         const firebaseConfig = {
             apiKey: "AIzaSyDGip6cFRf2Ljz3_e7QaocWBGGbwqTe3pw",
             authDomain: "nogada-db.firebaseapp.com",
@@ -147,7 +137,6 @@
 
         let currentFilter = '전체';
 
-        // 퀵 태그 버튼 로직
         function setTag(val) {
             document.getElementById('jobType').value = val;
             const tags = document.querySelectorAll('.tag');
@@ -155,7 +144,6 @@
             event.target.classList.add('active');
         }
 
-        // 지역 필터 로직
         function filterRegion(region) {
             currentFilter = region;
             const btns = document.querySelectorAll('.filter-btn');
@@ -164,7 +152,6 @@
             renderJobs();
         }
 
-        // 일자리 등록 로직
         function addJob() {
             const region = document.getElementById('regRegion').value;
             const jobType = document.getElementById('jobType').value;
@@ -174,41 +161,32 @@
             const pwd = document.getElementById('pwd').value;
 
             if(region && jobType && loc && pay && tel && pwd) {
-                if(!isNaN(pay)) pay = pay + "만"; // 숫자만 적어도 '만' 붙여줌
+                if(!isNaN(pay)) pay = pay + "만";
                 db.ref('jobs').push({
                     region, type: jobType, loc, pay, tel, pwd,
                     timestamp: Date.now(), time: new Date().toLocaleString()
                 });
-                alert('등록되었습니다! 좋은 분 구하시길 바랍니다.');
-                // 폼 초기화
-                document.getElementById('jobType').value = '';
-                document.getElementById('loc').value = '';
-                document.getElementById('pay').value = '';
-            } else { alert('지역을 포함하여 모든 빈칸을 채워주세요!'); }
+                alert('일자리가 성공적으로 등록되었습니다!');
+            } else { alert('모든 빈칸을 채워주세요!'); }
         }
 
-        // 일자리 삭제 로직 (작성자용)
         function deleteJob(jobKey, correctPwd) {
-            const inputPwd = prompt('글을 삭제하시려면 비밀번호 4자리를 입력하세요.');
+            const inputPwd = prompt('삭제 비밀번호 4자리를 입력하세요.');
             if (inputPwd === correctPwd) {
                 db.ref('jobs').child(jobKey).remove(); 
-                alert('삭제가 완료되었습니다.');
-            } else if (inputPwd !== null) { 
-                alert('비밀번호가 일치하지 않습니다!'); 
-            }
+                alert('삭제되었습니다.');
+            } else if (inputPwd !== null) { alert('비밀번호가 틀렸습니다!'); }
         }
 
-        // 🚨 유저 참여형 신고 로직 (형님 관리자용)
         function reportJob(jobKey) {
-            if(confirm('허위/불량 공고로 신고하시겠습니까?\n누적 신고된 공고는 자동으로 차단됩니다.')) {
+            if(confirm('허위 공고로 신고하시겠습니까?')) {
                 db.ref('reports').push({ jobKey: jobKey, time: new Date().toLocaleString() });
-                alert('신고가 접수되었습니다. 깨끗한 현장을 만들어주셔서 감사합니다!');
+                alert('신고 접수되었습니다.');
             }
         }
 
-        // 상대 시간 표시 로직 (방금 전, 5분 전 등)
         function timeSince(date) {
-            if (!date) return "이전 등록"; // 예전 데이터 예외 처리
+            if (!date) return "";
             const seconds = Math.floor((new Date() - date) / 1000);
             let interval = seconds / 3600;
             if (interval > 24) return Math.floor(interval / 24) + "일 전";
@@ -218,31 +196,30 @@
             return "방금 전";
         }
 
-        // 👁️ 심리전용 가짜 노출수 생성기 (시간 비례)
         function getFakeViews(timestamp) {
-            if (!timestamp) return Math.floor(Math.random() * 50) + 10;
+            if (!timestamp) return 10;
             const diff = Math.floor((Date.now() - timestamp) / 60000); 
-            let views = Math.floor(diff * 1.5) + Math.floor(Math.random() * 10) + 5;
-            return views > 500 ? "500+" : views;
+            let views = Math.floor(diff * 1.8) + 5;
+            return views > 999 ? "999+" : views;
         }
 
-        // 카톡 단톡방 공유용 텍스트 복사 로직
-        function copyToClipboard(text) {
+        function copyToClipboard(text, id) {
             const t = document.createElement("textarea");
             document.body.appendChild(t);
-            t.value = text + " \n👉 실시간 확인: nogada.vercel.app";
+            t.value = `[공고번호:${id}] ` + text + " \n👉 실시간 확인: nogada.vercel.app";
             t.select();
             document.execCommand('copy');
             document.body.removeChild(t);
-            alert('구인 정보가 복사되었습니다! 카톡 단톡방에 붙여넣기 하세요.');
+            alert('공고 내용이 복사되었습니다!');
         }
 
-        // 실시간 데이터 불러오기 및 렌더링
         let allJobs = [];
         db.ref('jobs').on('value', (snapshot) => {
             allJobs = [];
             snapshot.forEach(child => {
-                allJobs.push({ key: child.key, ...child.val() });
+                // 💡 Firebase 고유 Key의 뒷 4자리를 공고 ID로 활용
+                const shortId = child.key.substring(child.key.length - 4);
+                allJobs.push({ key: child.key, shortId: shortId, ...child.val() });
             });
             renderJobs();
         });
@@ -250,8 +227,6 @@
         function renderJobs() {
             const listArea = document.getElementById('job-list');
             listArea.innerHTML = '';
-            
-            // 필터링 및 최신순 정렬
             const filtered = allJobs.filter(job => currentFilter === '전체' || job.region === currentFilter).reverse();
 
             filtered.forEach(data => {
@@ -269,17 +244,22 @@
                             </div>
                         </div>
                         
-                        <b><span class="loc-badge">${data.region || '전국'}</span><span class="type-badge">${data.type}</span> ${data.loc} ${isNew ? '<span class="new-badge">NEW</span>' : ''}</b>
+                        <b>
+                            <span class="id-badge">ID:${data.shortId}</span>
+                            <span class="loc-badge">${data.region || '전국'}</span>
+                            <span class="type-badge">${data.type}</span> 
+                            ${data.loc} ${isNew ? '<span class="new-badge">NEW</span>' : ''}
+                        </b>
                         
                         <div style="margin: 15px 0; display:flex; align-items:center; gap:10px;">
-                            <span style="font-size:24px; color:#2196F3; font-weight:900;">${data.pay}</span>
-                            <a href="https://m.map.naver.com/search2/search.naver?query=${encodeURIComponent((data.region || '') + ' ' + data.loc)}" target="_blank" class="btn-sub btn-map">📍 현장지도</a>
-                            <button onclick="copyToClipboard('[${data.type}] ${data.loc} / 일당: ${data.pay} / 연락처: ${data.tel}')" class="btn-sub">🔗 복사</button>
+                            <span style="font-size:26px; color:#2196F3; font-weight:900;">${data.pay}</span>
+                            <a href="https://m.map.naver.com/search2/search.naver?query=${encodeURIComponent((data.region || '') + ' ' + data.loc)}" target="_blank" class="btn-sub btn-map">📍 지도</a>
+                            <button onclick="copyToClipboard('${data.type} ${data.loc} 일당${data.pay}', '${data.shortId}')" class="btn-sub">🔗 복사</button>
                         </div>
                         
                         <div style="display: flex; gap: 8px; margin-top: 15px;">
-                            <a href="tel:${data.tel}" class="btn-reg" style="flex: 1.5; text-align: center; text-decoration: none; background: #4CAF50; display:flex; align-items:center; justify-content:center; border-radius:10px;">📞 바로 전화하기</a>
-                            <a href="sms:${data.tel}?body=${encodeURIComponent('노가다의 신 앱 보고 연락드렸습니다. [' + data.type + '] 지원합니다.')}" class="btn-reg" style="flex: 1; text-align: center; text-decoration: none; background: #ff9800; display:flex; align-items:center; justify-content:center; border-radius:10px;">문자 보내기</a>
+                            <a href="tel:${data.tel}" class="btn-reg" style="flex: 1.5; text-align: center; text-decoration: none; background: #4CAF50; display:flex; align-items:center; justify-content:center; border-radius:12px;">📞 전화</a>
+                            <a href="sms:${data.tel}?body=${encodeURIComponent('노가다의 신 [ID:' + data.shortId + '] 보고 연락드렸습니다.')}" class="btn-reg" style="flex: 1; text-align: center; text-decoration: none; background: #ff9800; display:flex; align-items:center; justify-content:center; border-radius:12px;">문자</a>
                         </div>
                         
                         <div class="time">
