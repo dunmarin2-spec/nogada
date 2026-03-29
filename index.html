@@ -5,72 +5,72 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>노가다의 신 - 실시간 인력 구인/구직</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>👷</text></svg>">
-    
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
-    
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Pretendard:wght@400;700;900&display=swap');
         
-        body { font-family: 'Pretendard', sans-serif; margin: 0; padding: 345px 0 100px 0; background: #f0f2f5; }
+        /* 💡 본문 여백 재조정: 입력창이 슬림해진 만큼 위로 올림 */
+        body { font-family: 'Pretendard', sans-serif; margin: 0; padding: 275px 0 95px 0; background: #f0f2f5; }
         
-        .ticker-bar { position: fixed; top: 0; width: 100%; height: 25px; background: #1a1a1a; color: #00ff00; font-size: 11px; display: flex; align-items: center; overflow: hidden; z-index: 1001; }
+        .ticker-bar { position: fixed; top: 0; width: 100%; height: 22px; background: #1a1a1a; color: #00ff00; font-size: 10px; display: flex; align-items: center; overflow: hidden; z-index: 1001; }
         .ticker-text { white-space: nowrap; animation: ticker 25s linear infinite; font-weight: bold; }
         @keyframes ticker { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
 
-        /* ✅ 찬둥 형님 카톡 오픈프로필 (sYU57Oni) */
-        .app-header { position: fixed; top: 25px; width: 100%; height: 65px; background: #fee500; color: #3c1e1e; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 1000; box-shadow: 0 2px 10px rgba(0,0,0,0.1); cursor: pointer; }
-        .app-title { font-size: 22px; font-weight: 900; }
-        .app-subtitle { font-size: 11px; font-weight: 800; color: #d32f2f; margin-top: 2px; }
+        /* 💡 헤더 높이 축소 */
+        .app-header { position: fixed; top: 22px; width: 100%; height: 48px; background: #fee500; color: #3c1e1e; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 1000; box-shadow: 0 1px 5px rgba(0,0,0,0.1); cursor: pointer; }
+        .app-title { font-size: 18px; font-weight: 900; }
+        .app-subtitle { font-size: 9px; font-weight: 800; color: #d32f2f; }
 
-        .filter-bar { position: fixed; top: 90px; width: 100%; background: #fff; padding: 10px; box-sizing: border-box; z-index: 999; border-bottom: 1px solid #eee; display: flex; gap: 8px; overflow-x: auto; }
-        .filter-btn { background: #f1f3f5; border: 1px solid #dee2e6; padding: 6px 15px; border-radius: 20px; font-size: 13px; white-space: nowrap; cursor: pointer; font-weight: bold; }
+        /* 💡 필터 바 슬림화 */
+        .filter-bar { position: fixed; top: 70px; width: 100%; background: #fff; padding: 6px; box-sizing: border-box; z-index: 999; border-bottom: 1px solid #eee; display: flex; gap: 5px; overflow-x: auto; }
+        .filter-btn { background: #f1f3f5; border: 1px solid #dee2e6; padding: 4px 10px; border-radius: 15px; font-size: 11px; white-space: nowrap; cursor: pointer; font-weight: bold; }
         .filter-btn.active { background: #2196F3; color: white; border-color: #2196F3; }
 
-        .reg-box { position: fixed; top: 143px; width: 100%; background: white; padding: 12px; box-sizing: border-box; border-bottom: 2px solid #ddd; z-index: 998; display: flex; flex-direction: column; gap: 8px; }
-        .quick-tags { display: flex; gap: 5px; overflow-x: auto; padding-bottom: 2px; }
-        .tag { background: #e9ecef; padding: 5px 12px; border-radius: 6px; font-size: 12px; font-weight: bold; color: #495057; cursor: pointer; white-space: nowrap; }
+        /* 💡 등록 박스 다이어트: 높이를 160px로 고정해서 안 짤리게 함 */
+        .reg-box { position: fixed; top: 107px; width: 100%; height: 165px; background: white; padding: 8px 12px; box-sizing: border-box; border-bottom: 2px solid #ddd; z-index: 998; display: flex; flex-direction: column; gap: 5px; }
+        .quick-tags { display: flex; gap: 4px; overflow-x: auto; padding-bottom: 2px; }
+        .tag { background: #e9ecef; padding: 3px 8px; border-radius: 5px; font-size: 10px; font-weight: bold; color: #495057; cursor: pointer; white-space: nowrap; }
         .tag.active { background: #4CAF50; color: white; }
 
-        .input-row { display: flex; gap: 6px; width: 100%; }
-        input, select { flex: 1; padding: 10px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; outline: none; background: #fafafa; }
-        .btn-reg { flex: 1; background: #2196F3; color: white; border: none; padding: 10px; border-radius: 8px; font-size: 15px; font-weight: 900; cursor: pointer; }
+        .input-row { display: flex; gap: 4px; width: 100%; }
+        input, select { flex: 1; padding: 7px; border: 1px solid #ddd; border-radius: 6px; font-size: 13px; outline: none; background: #fafafa; min-width: 0; }
+        .btn-reg { width: 100%; background: #2196F3; color: white; border: none; padding: 9px; border-radius: 6px; font-size: 14px; font-weight: 900; cursor: pointer; margin-top: 1px; }
         
-        .container { padding: 12px; }
-        .card { position: relative; background: white; margin-bottom: 16px; padding: 18px; border-radius: 16px; border-left: 8px solid #2196F3; box-shadow: 0 4px 15px rgba(0,0,0,0.07); }
+        .container { padding: 8px; }
+        .card { position: relative; background: white; margin-bottom: 10px; padding: 12px; border-radius: 10px; border-left: 5px solid #2196F3; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
         .card.high-pay { border-left-color: #ff9800; background: #fffdf7; }
         
-        .id-badge { background: #6c757d; color: white; padding: 2px 6px; border-radius: 4px; font-size: 10px; font-weight: bold; margin-right: 5px; }
-        .loc-badge { background: #343a40; color: white; padding: 3px 8px; border-radius: 4px; font-size: 11px; margin-right: 5px; font-weight: bold; }
-        .new-badge { background: #ff4757; color: white; font-size: 10px; padding: 2px 6px; border-radius: 4px; margin-left: 6px; font-weight: 900; }
-        .view-count { font-size: 11px; color: #2ecc71; font-weight: bold; display: flex; align-items: center; gap: 3px; }
-        .card b { font-size: 18px; color: #111; display: block; margin-bottom: 10px; line-height: 1.4; }
-        .type-badge { background: #eef2ff; color: #4f46e5; padding: 4px 10px; border-radius: 8px; font-size: 13px; font-weight: 900; margin-right: 5px; }
+        .id-badge { background: #6c757d; color: white; padding: 1px 4px; border-radius: 3px; font-size: 8px; font-weight: bold; margin-right: 3px; }
+        .loc-badge { background: #343a40; color: white; padding: 2px 5px; border-radius: 3px; font-size: 9px; margin-right: 3px; font-weight: bold; }
+        .new-badge { background: #ff4757; color: white; font-size: 8px; padding: 1px 3px; border-radius: 2px; margin-left: 3px; font-weight: 900; }
+        .view-count { font-size: 9px; color: #2ecc71; font-weight: bold; }
+        .card b { font-size: 16px; color: #111; display: block; margin-bottom: 6px; line-height: 1.2; }
+        .type-badge { background: #eef2ff; color: #4f46e5; padding: 2px 6px; border-radius: 5px; font-size: 11px; font-weight: 900; }
         
-        .btn-sub { background: #fff; border: 1.5px solid #ddd; color: #555; padding: 6px 10px; border-radius: 8px; font-size: 12px; font-weight: 800; text-decoration: none; cursor: pointer; }
+        .btn-sub { background: #fff; border: 1px solid #ddd; color: #555; padding: 4px 7px; border-radius: 5px; font-size: 10px; font-weight: 800; text-decoration: none; }
         .btn-map { border-color: #2196F3; color: #2196F3; }
-        .btn-report { background: none; border: none; color: #ff6b6b; font-size: 12px; font-weight: bold; text-decoration: underline; cursor: pointer; padding: 0; }
-        .btn-delete { background: #f1f3f5; width: 28px; height: 28px; border-radius: 50%; border: none; color: #adb5bd; cursor: pointer; margin-left: 10px; }
+        .btn-delete { background: #f1f3f5; width: 24px; height: 24px; border-radius: 50%; border: none; color: #adb5bd; cursor: pointer; }
 
-        .time { font-size: 11px; color: #999; margin-top: 15px; display: flex; justify-content: space-between; border-top: 1px solid #f8f9fa; padding-top: 12px; align-items: center; }
+        .time { font-size: 9px; color: #999; margin-top: 8px; display: flex; justify-content: space-between; border-top: 1px solid #f8f9fa; padding-top: 6px; }
         
-        /* ✅ 업그레이드된 쿠팡 검색 배너 디자인 (AF4757238) */
-        .coupang-search-banner { position: fixed; bottom: 0; width: 100%; height: 90px; background: #4285f4; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 0 15px; box-sizing: border-box; z-index: 1000; cursor: pointer; border-top: 3px solid #ffffff; }
-        .cp-text { color: white; font-size: 13px; font-weight: 700; margin-bottom: 8px; letter-spacing: -0.5px; }
-        .cp-search-bar { width: 100%; background: white; height: 40px; border-radius: 20px; display: flex; align-items: center; padding: 0 15px; box-sizing: border-box; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
-        .cp-search-bar span { color: #999; font-size: 14px; flex: 1; }
-        .cp-search-icon { color: #4285f4; font-weight: 900; font-size: 18px; }
+        /* ✅ 쿠팡 검색창 배너 하단 고정 */
+        .coupang-search-banner { position: fixed; bottom: 0; width: 100%; height: 80px; background: #4285f4; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 0 12px; box-sizing: border-box; z-index: 1000; cursor: pointer; border-top: 2px solid #ffffff; }
+        .cp-text { color: white; font-size: 11px; font-weight: 700; margin-bottom: 5px; }
+        .cp-search-bar { width: 100%; background: white; height: 32px; border-radius: 16px; display: flex; align-items: center; padding: 0 12px; box-sizing: border-box; }
+        .cp-search-bar span { color: #999; font-size: 11px; flex: 1; }
+        .cp-search-icon { color: #4285f4; font-weight: 900; font-size: 14px; }
     </style>
 </head>
 <body>
 
     <div class="ticker-bar">
-        <div class="ticker-text">📢 [공지] 허위 공고 신고 시 즉시 차단! | 상단 노출은 카톡 문의 주세요! | 안전한 현장 정보를 제공합니다.</div>
+        <div class="ticker-text">📢 [공지] 허위 공고 즉시 차단! | 상단 노출은 카톡 문의! | 현재 전 지역 단가 상승 중! 안 전 제 일 !</div>
     </div>
 
     <div class="app-header" onclick="location.href='https://open.kakao.com/o/sYU57Oni'">
         <div class="app-title">노가다의 신 👷</div>
-        <div class="app-subtitle">⚡ [상단 노출/문의] 카톡 1:1 상담 (클릭)</div>
+        <div class="app-subtitle">⚡ [상단 노출문의] 카톡 1:1 상담 (클릭)</div>
     </div>
 
     <div class="filter-bar" id="regionFilter">
@@ -80,46 +80,33 @@
         <div class="filter-btn" onclick="filterRegion('인천')">인천</div>
         <div class="filter-btn" onclick="filterRegion('충청/대전')">충청/대전</div>
         <div class="filter-btn" onclick="filterRegion('경상/부산')">경상/부산</div>
-        <div class="filter-btn" onclick="filterRegion('전라/광주')">전라/광주</div>
     </div>
 
     <div class="reg-box">
         <div class="quick-tags">
-            <div class="tag" onclick="setTag('폼맨')">폼맨</div>
-            <div class="tag" onclick="setTag('철근')">철근</div>
-            <div class="tag" onclick="setTag('곰방')">곰방</div>
-            <div class="tag" onclick="setTag('조적')">조적</div>
-            <div class="tag" onclick="setTag('잡부')">잡부</div>
-            <div class="tag" onclick="setTag('비계')">비계</div>
-            <div class="tag" onclick="setTag('타일')">타일</div>
+            <div class="tag" onclick="setTag('폼맨')">폼맨</div><div class="tag" onclick="setTag('철근')">철근</div><div class="tag" onclick="setTag('곰방')">곰방</div><div class="tag" onclick="setTag('조적')">조적</div><div class="tag" onclick="setTag('잡부')">잡부</div><div class="tag" onclick="setTag('비계')">비계</div>
         </div>
         <div class="input-row">
-            <select id="regRegion">
-                <option value="">지역선택</option>
-                <option value="서울">서울</option><option value="경기">경기</option>
-                <option value="인천">인천</option><option value="충청/대전">충청/대전</option>
-                <option value="경상/부산">경상/부산</option><option value="전라/광주">전라/광주</option>
-                <option value="강원/제주">강원/제주</option>
-            </select>
-            <input type="text" id="jobType" placeholder="직종 선택/입력">
+            <select id="regRegion" style="flex: 0.7;"><option value="">지역</option><option value="서울">서울</option><option value="경기">경기</option><option value="인천">인천</option><option value="충청/대전">충청/대전</option><option value="경상/부산">경상/부산</option></select>
+            <input type="text" id="jobType" placeholder="직종 직접입력">
         </div>
         <div class="input-row">
-            <input type="text" id="loc" placeholder="상세현장(예: 고덕 삼성)">
-            <input type="text" id="pay" placeholder="단가(예: 19)">
+            <input type="text" id="loc" placeholder="상세현장(예: 고덕)">
+            <input type="text" id="pay" placeholder="단가(예: 19)" style="flex: 0.8;">
         </div>
         <div class="input-row">
             <input type="tel" id="tel" placeholder="연락처">
-            <input type="password" id="pwd" placeholder="비번4자리">
-            <button class="btn-reg" onclick="addJob()">1초 등록</button>
+            <input type="password" id="pwd" placeholder="비번4자리" style="flex: 0.6;">
         </div>
+        <button class="btn-reg" onclick="addJob()">1초 등록하기</button>
     </div>
 
     <div class="container" id="job-list"></div>
 
     <div class="coupang-search-banner" onclick="window.open('https://www.coupang.com/np/search?channel=AF4757238&q=현장안전화')">
-        <div class="cp-text">쿠팡에서 필요한 현장 용품 검색하기</div>
+        <div class="cp-text">현장 용품 쿠팡 최저가 검색</div>
         <div class="cp-search-bar">
-            <span>현장 안전화, 작업복 검색...</span>
+            <span>안전화, 작업복 검색...</span>
             <div class="cp-search-icon">🔍</div>
         </div>
     </div>
@@ -168,15 +155,13 @@
                     region, type: jobType, loc, pay, tel, pwd,
                     timestamp: Date.now(), time: new Date().toLocaleString()
                 });
-                alert('일자리가 등록되었습니다!');
-                document.getElementById('jobType').value = '';
-                document.getElementById('loc').value = '';
-                document.getElementById('pay').value = '';
-            } else { alert('빈칸을 모두 채워주세요!'); }
+                alert('등록완료!');
+                ["jobType", "loc", "pay", "tel", "pwd"].forEach(id => document.getElementById(id).value = '');
+            } else { alert('모든 칸을 채워주세요!'); }
         }
 
         function deleteJob(jobKey, correctPwd) {
-            const inputPwd = prompt('비밀번호 4자리를 입력하세요.');
+            const inputPwd = prompt('비밀번호를 입력하세요.');
             if (inputPwd === correctPwd) {
                 db.ref('jobs').child(jobKey).remove(); 
                 alert('삭제되었습니다.');
@@ -184,9 +169,9 @@
         }
 
         function reportJob(jobKey) {
-            if(confirm('허위 공고로 신고하시겠습니까?')) {
+            if(confirm('신고하시겠습니까?')) {
                 db.ref('reports').push({ jobKey: jobKey, time: new Date().toLocaleString() });
-                alert('신고 접수되었습니다.');
+                alert('신고 접수!');
             }
         }
 
@@ -215,7 +200,7 @@
             t.select();
             document.execCommand('copy');
             document.body.removeChild(t);
-            alert('공고 내용이 복사되었습니다!');
+            alert('복사완료!');
         }
 
         let allJobs = [];
@@ -240,36 +225,24 @@
 
                 const cardHtml = `
                     <div class="card ${isHighPay ? 'high-pay' : ''}">
-                        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px;">
-                            <div class="view-count">👁️ 현재 ${views}명 노출 중</div>
+                        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:5px;">
+                            <div class="view-count">👁️ ${views}명 노출</div>
                             <div style="display:flex; align-items:center;">
                                 <button onclick="reportJob('${data.key}')" class="btn-report">🚨신고</button>
                                 <button onclick="deleteJob('${data.key}', '${data.pwd}')" class="btn-delete">✕</button>
                             </div>
                         </div>
-                        
-                        <b>
-                            <span class="id-badge">ID:${data.shortId}</span>
-                            <span class="loc-badge">${data.region || '전국'}</span>
-                            <span class="type-badge">${data.type}</span> 
-                            ${data.loc} ${isNew ? '<span class="new-badge">NEW</span>' : ''}
-                        </b>
-                        
-                        <div style="margin: 15px 0; display:flex; align-items:center; gap:10px;">
-                            <span style="font-size:26px; color:#2196F3; font-weight:900;">${data.pay}</span>
+                        <b><span class="id-badge">${data.shortId}</span><span class="loc-badge">${data.region || '전국'}</span><span class="type-badge">${data.type}</span> ${data.loc} ${isNew ? '<span class="new-badge">NEW</span>' : ''}</b>
+                        <div style="margin: 8px 0; display:flex; align-items:center; gap:6px;">
+                            <span style="font-size:20px; color:#2196F3; font-weight:900;">${data.pay}</span>
                             <a href="https://m.map.naver.com/search2/search.naver?query=${encodeURIComponent((data.region || '') + ' ' + data.loc)}" target="_blank" class="btn-sub btn-map">📍 지도</a>
                             <button onclick="copyToClipboard('${data.type} ${data.loc} 일당${data.pay}', '${data.shortId}')" class="btn-sub">🔗 복사</button>
                         </div>
-                        
-                        <div style="display: flex; gap: 8px; margin-top: 15px;">
-                            <a href="tel:${data.tel}" class="btn-reg" style="flex: 1.5; text-align: center; text-decoration: none; background: #4CAF50; display:flex; align-items:center; justify-content:center; border-radius:12px;">📞 전화</a>
-                            <a href="sms:${data.tel}?body=${encodeURIComponent('노가다의 신 [ID:' + data.shortId + '] 보고 연락드렸습니다.')}" class="btn-reg" style="flex: 1; text-align: center; text-decoration: none; background: #ff9800; display:flex; align-items:center; justify-content:center; border-radius:12px;">문자</a>
+                        <div style="display: flex; gap: 5px; margin-top: 10px;">
+                            <a href="tel:${data.tel}" class="btn-reg" style="flex: 1.5; text-align: center; text-decoration: none; background: #4CAF50; display:flex; align-items:center; justify-content:center; border-radius:6px; padding:7px;">📞 전화</a>
+                            <a href="sms:${data.tel}?body=${encodeURIComponent('노가다의 신 [ID:' + data.shortId + '] 지원합니다.')}" class="btn-reg" style="flex: 1; text-align: center; text-decoration: none; background: #ff9800; display:flex; align-items:center; justify-content:center; border-radius:6px; padding:7px;">문자</a>
                         </div>
-                        
-                        <div class="time">
-                            <span>등록: ${data.time}</span>
-                            <span style="color:#2196F3; font-weight:900;">${timeSince(data.timestamp)}</span>
-                        </div>
+                        <div class="time"><span>등록: ${data.time}</span><span style="color:#2196F3; font-weight:900;">${timeSince(data.timestamp)}</span></div>
                     </div>
                 `;
                 listArea.insertAdjacentHTML('beforeend', cardHtml);
