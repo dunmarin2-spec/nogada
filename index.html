@@ -12,13 +12,13 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Pretendard:wght@400;700;900&display=swap');
         
-        body { font-family: 'Pretendard', sans-serif; margin: 0; padding: 345px 0 90px 0; background: #f0f2f5; }
+        body { font-family: 'Pretendard', sans-serif; margin: 0; padding: 345px 0 100px 0; background: #f0f2f5; }
         
         .ticker-bar { position: fixed; top: 0; width: 100%; height: 25px; background: #1a1a1a; color: #00ff00; font-size: 11px; display: flex; align-items: center; overflow: hidden; z-index: 1001; }
         .ticker-text { white-space: nowrap; animation: ticker 25s linear infinite; font-weight: bold; }
         @keyframes ticker { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
 
-        /* 💡 카톡 오픈프로필 연결된 헤더 */
+        /* ✅ 찬둥 형님 카톡 오픈프로필 (sYU57Oni) */
         .app-header { position: fixed; top: 25px; width: 100%; height: 65px; background: #fee500; color: #3c1e1e; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 1000; box-shadow: 0 2px 10px rgba(0,0,0,0.1); cursor: pointer; }
         .app-title { font-size: 22px; font-weight: 900; }
         .app-subtitle { font-size: 11px; font-weight: 800; color: #d32f2f; margin-top: 2px; }
@@ -40,9 +40,7 @@
         .card { position: relative; background: white; margin-bottom: 16px; padding: 18px; border-radius: 16px; border-left: 8px solid #2196F3; box-shadow: 0 4px 15px rgba(0,0,0,0.07); }
         .card.high-pay { border-left-color: #ff9800; background: #fffdf7; }
         
-        /* 💡 공고 번호(ID) 배지 스타일 */
         .id-badge { background: #6c757d; color: white; padding: 2px 6px; border-radius: 4px; font-size: 10px; font-weight: bold; margin-right: 5px; }
-        
         .loc-badge { background: #343a40; color: white; padding: 3px 8px; border-radius: 4px; font-size: 11px; margin-right: 5px; font-weight: bold; }
         .new-badge { background: #ff4757; color: white; font-size: 10px; padding: 2px 6px; border-radius: 4px; margin-left: 6px; font-weight: 900; }
         .view-count { font-size: 11px; color: #2ecc71; font-weight: bold; display: flex; align-items: center; gap: 3px; }
@@ -56,14 +54,18 @@
 
         .time { font-size: 11px; color: #999; margin-top: 15px; display: flex; justify-content: space-between; border-top: 1px solid #f8f9fa; padding-top: 12px; align-items: center; }
         
-        .coupang-footer { position: fixed; bottom: 0; width: 100%; height: 80px; background: white; border-top: 3px solid #fd7e14; display: flex; align-items: center; padding: 0 20px; box-sizing: border-box; z-index: 1000; cursor: pointer; }
-        .ad-btn { background: #fd7e14; color: white; padding: 10px 16px; border-radius: 8px; font-size: 13px; font-weight: 900; margin-left: auto; }
+        /* ✅ 업그레이드된 쿠팡 검색 배너 디자인 (AF4757238) */
+        .coupang-search-banner { position: fixed; bottom: 0; width: 100%; height: 90px; background: #4285f4; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 0 15px; box-sizing: border-box; z-index: 1000; cursor: pointer; border-top: 3px solid #ffffff; }
+        .cp-text { color: white; font-size: 13px; font-weight: 700; margin-bottom: 8px; letter-spacing: -0.5px; }
+        .cp-search-bar { width: 100%; background: white; height: 40px; border-radius: 20px; display: flex; align-items: center; padding: 0 15px; box-sizing: border-box; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+        .cp-search-bar span { color: #999; font-size: 14px; flex: 1; }
+        .cp-search-icon { color: #4285f4; font-weight: 900; font-size: 18px; }
     </style>
 </head>
 <body>
 
     <div class="ticker-bar">
-        <div class="ticker-text">📢 [실시간 현황] 입금 후 카톡 보내시면 1분 내로 상단 고정! | 허위 광고 차단 중! 안전제일!</div>
+        <div class="ticker-text">📢 [공지] 허위 공고 신고 시 즉시 차단! | 상단 노출은 카톡 문의 주세요! | 안전한 현장 정보를 제공합니다.</div>
     </div>
 
     <div class="app-header" onclick="location.href='https://open.kakao.com/o/sYU57Oni'">
@@ -114,12 +116,12 @@
 
     <div class="container" id="job-list"></div>
 
-    <div class="coupang-footer" onclick="window.open('https://link.coupang.com/a/ebozHo')">
-        <div style="flex:1">
-            <div style="font-size:15px; color:#fd7e14; font-weight:900;">👟 현장 필수! 발 편한 안전화</div>
-            <div style="font-size:12px; color:#444;">가성비 끝판왕 모델, 내일 당장 도착!</div>
+    <div class="coupang-search-banner" onclick="window.open('https://www.coupang.com/np/search?channel=AF4757238&q=현장안전화')">
+        <div class="cp-text">쿠팡에서 필요한 현장 용품 검색하기</div>
+        <div class="cp-search-bar">
+            <span>현장 안전화, 작업복 검색...</span>
+            <div class="cp-search-icon">🔍</div>
         </div>
-        <div class="ad-btn">구경하기</div>
     </div>
 
     <script>
@@ -166,16 +168,19 @@
                     region, type: jobType, loc, pay, tel, pwd,
                     timestamp: Date.now(), time: new Date().toLocaleString()
                 });
-                alert('일자리가 성공적으로 등록되었습니다!');
-            } else { alert('모든 빈칸을 채워주세요!'); }
+                alert('일자리가 등록되었습니다!');
+                document.getElementById('jobType').value = '';
+                document.getElementById('loc').value = '';
+                document.getElementById('pay').value = '';
+            } else { alert('빈칸을 모두 채워주세요!'); }
         }
 
         function deleteJob(jobKey, correctPwd) {
-            const inputPwd = prompt('삭제 비밀번호 4자리를 입력하세요.');
+            const inputPwd = prompt('비밀번호 4자리를 입력하세요.');
             if (inputPwd === correctPwd) {
                 db.ref('jobs').child(jobKey).remove(); 
                 alert('삭제되었습니다.');
-            } else if (inputPwd !== null) { alert('비밀번호가 틀렸습니다!'); }
+            }
         }
 
         function reportJob(jobKey) {
@@ -206,7 +211,7 @@
         function copyToClipboard(text, id) {
             const t = document.createElement("textarea");
             document.body.appendChild(t);
-            t.value = `[공고번호:${id}] ` + text + " \n👉 실시간 확인: nogada.vercel.app";
+            t.value = `[ID:${id}] ` + text + " \n👉 실시간 확인: nogada.vercel.app";
             t.select();
             document.execCommand('copy');
             document.body.removeChild(t);
@@ -217,7 +222,6 @@
         db.ref('jobs').on('value', (snapshot) => {
             allJobs = [];
             snapshot.forEach(child => {
-                // 💡 Firebase 고유 Key의 뒷 4자리를 공고 ID로 활용
                 const shortId = child.key.substring(child.key.length - 4);
                 allJobs.push({ key: child.key, shortId: shortId, ...child.val() });
             });
