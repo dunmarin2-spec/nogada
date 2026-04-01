@@ -9,52 +9,36 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Pretendard:wght@400;700;900&display=swap');
-        
-        /* 💡 본문 여백 재조정: 입력창이 슬림해진 만큼 위로 올림 */
         body { font-family: 'Pretendard', sans-serif; margin: 0; padding: 275px 0 95px 0; background: #f0f2f5; }
-        
         .ticker-bar { position: fixed; top: 0; width: 100%; height: 22px; background: #1a1a1a; color: #00ff00; font-size: 10px; display: flex; align-items: center; overflow: hidden; z-index: 1001; }
         .ticker-text { white-space: nowrap; animation: ticker 25s linear infinite; font-weight: bold; }
         @keyframes ticker { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
-
-        /* 💡 헤더 높이 축소 */
         .app-header { position: fixed; top: 22px; width: 100%; height: 48px; background: #fee500; color: #3c1e1e; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 1000; box-shadow: 0 1px 5px rgba(0,0,0,0.1); cursor: pointer; }
         .app-title { font-size: 18px; font-weight: 900; }
         .app-subtitle { font-size: 9px; font-weight: 800; color: #d32f2f; }
-
-        /* 💡 필터 바 슬림화 */
         .filter-bar { position: fixed; top: 70px; width: 100%; background: #fff; padding: 6px; box-sizing: border-box; z-index: 999; border-bottom: 1px solid #eee; display: flex; gap: 5px; overflow-x: auto; }
         .filter-btn { background: #f1f3f5; border: 1px solid #dee2e6; padding: 4px 10px; border-radius: 15px; font-size: 11px; white-space: nowrap; cursor: pointer; font-weight: bold; }
         .filter-btn.active { background: #2196F3; color: white; border-color: #2196F3; }
-
-        /* 💡 등록 박스 다이어트: 높이를 160px로 고정해서 안 짤리게 함 */
         .reg-box { position: fixed; top: 107px; width: 100%; height: 165px; background: white; padding: 8px 12px; box-sizing: border-box; border-bottom: 2px solid #ddd; z-index: 998; display: flex; flex-direction: column; gap: 5px; }
         .quick-tags { display: flex; gap: 4px; overflow-x: auto; padding-bottom: 2px; }
         .tag { background: #e9ecef; padding: 3px 8px; border-radius: 5px; font-size: 10px; font-weight: bold; color: #495057; cursor: pointer; white-space: nowrap; }
         .tag.active { background: #4CAF50; color: white; }
-
         .input-row { display: flex; gap: 4px; width: 100%; }
         input, select { flex: 1; padding: 7px; border: 1px solid #ddd; border-radius: 6px; font-size: 13px; outline: none; background: #fafafa; min-width: 0; }
         .btn-reg { width: 100%; background: #2196F3; color: white; border: none; padding: 9px; border-radius: 6px; font-size: 14px; font-weight: 900; cursor: pointer; margin-top: 1px; }
-        
         .container { padding: 8px; }
         .card { position: relative; background: white; margin-bottom: 10px; padding: 12px; border-radius: 10px; border-left: 5px solid #2196F3; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
         .card.high-pay { border-left-color: #ff9800; background: #fffdf7; }
-        
         .id-badge { background: #6c757d; color: white; padding: 1px 4px; border-radius: 3px; font-size: 8px; font-weight: bold; margin-right: 3px; }
         .loc-badge { background: #343a40; color: white; padding: 2px 5px; border-radius: 3px; font-size: 9px; margin-right: 3px; font-weight: bold; }
         .new-badge { background: #ff4757; color: white; font-size: 8px; padding: 1px 3px; border-radius: 2px; margin-left: 3px; font-weight: 900; }
         .view-count { font-size: 9px; color: #2ecc71; font-weight: bold; }
         .card b { font-size: 16px; color: #111; display: block; margin-bottom: 6px; line-height: 1.2; }
         .type-badge { background: #eef2ff; color: #4f46e5; padding: 2px 6px; border-radius: 5px; font-size: 11px; font-weight: 900; }
-        
         .btn-sub { background: #fff; border: 1px solid #ddd; color: #555; padding: 4px 7px; border-radius: 5px; font-size: 10px; font-weight: 800; text-decoration: none; }
         .btn-map { border-color: #2196F3; color: #2196F3; }
         .btn-delete { background: #f1f3f5; width: 24px; height: 24px; border-radius: 50%; border: none; color: #adb5bd; cursor: pointer; }
-
         .time { font-size: 9px; color: #999; margin-top: 8px; display: flex; justify-content: space-between; border-top: 1px solid #f8f9fa; padding-top: 6px; }
-        
-        /* ✅ 쿠팡 검색창 배너 하단 고정 */
         .coupang-search-banner { position: fixed; bottom: 0; width: 100%; height: 80px; background: #4285f4; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 0 12px; box-sizing: border-box; z-index: 1000; cursor: pointer; border-top: 2px solid #ffffff; }
         .cp-text { color: white; font-size: 11px; font-weight: 700; margin-bottom: 5px; }
         .cp-search-bar { width: 100%; background: white; height: 32px; border-radius: 16px; display: flex; align-items: center; padding: 0 12px; box-sizing: border-box; }
@@ -112,19 +96,37 @@
     </div>
 
     <script>
-        const firebaseConfig = {
-            apiKey: "AIzaSyDGip6cFRf2Ljz3_e7QaocWBGGbwqTe3pw",
-            authDomain: "nogada-db.firebaseapp.com",
-            databaseURL: "https://nogada-db-default-rtdb.asia-southeast1.firebasedatabase.app/", 
-            projectId: "nogada-db",
-            storageBucket: "nogada-db.firebasestorage.app",
-            messagingSenderId: "479523158859",
-            appId: "1:479523158859:web:582940fdbc348b251306ce"
-        };
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.database();
-
+        let db; // Firebase DB 객체용 전역 변수
+        let allJobs = [];
         let currentFilter = '전체';
+
+        // 🛡️ 보안 핵심: 서버(api/db.js)에서 설정값을 가져와 초기화
+        async function initApp() {
+            try {
+                const response = await fetch('/api/db');
+                const firebaseConfig = await response.json();
+                
+                firebase.initializeApp(firebaseConfig);
+                db = firebase.database();
+                
+                // DB 연결 후 실시간 감시 시작
+                startListening();
+            } catch (error) {
+                console.error("보안 연결 실패:", error);
+                alert("서버 연결에 문제가 생겼습니다.");
+            }
+        }
+
+        function startListening() {
+            db.ref('jobs').on('value', (snapshot) => {
+                allJobs = [];
+                snapshot.forEach(child => {
+                    const shortId = child.key.substring(child.key.length - 4);
+                    allJobs.push({ key: child.key, shortId: shortId, ...child.val() });
+                });
+                renderJobs();
+            });
+        }
 
         function setTag(val) {
             document.getElementById('jobType').value = val;
@@ -203,16 +205,6 @@
             alert('복사완료!');
         }
 
-        let allJobs = [];
-        db.ref('jobs').on('value', (snapshot) => {
-            allJobs = [];
-            snapshot.forEach(child => {
-                const shortId = child.key.substring(child.key.length - 4);
-                allJobs.push({ key: child.key, shortId: shortId, ...child.val() });
-            });
-            renderJobs();
-        });
-
         function renderJobs() {
             const listArea = document.getElementById('job-list');
             listArea.innerHTML = '';
@@ -233,11 +225,11 @@
                             </div>
                         </div>
                         <b>
-    <span class="id-badge">ID:${data.shortId}</span> 
-    <span class="loc-badge">${data.region || '전국'}</span>
-    <span class="type-badge">${data.type}</span> 
-    ${data.loc} ${isNew ? '<span class="new-badge">NEW</span>' : ''}
-</b>
+                            <span class="id-badge">ID:${data.shortId}</span> 
+                            <span class="loc-badge">${data.region || '전국'}</span>
+                            <span class="type-badge">${data.type}</span> 
+                            ${data.loc} ${isNew ? '<span class="new-badge">NEW</span>' : ''}
+                        </b>
                         <div style="margin: 8px 0; display:flex; align-items:center; gap:6px;">
                             <span style="font-size:20px; color:#2196F3; font-weight:900;">${data.pay}</span>
                             <a href="https://m.map.naver.com/search2/search.naver?query=${encodeURIComponent((data.region || '') + ' ' + data.loc)}" target="_blank" class="btn-sub btn-map">📍 지도</a>
@@ -253,6 +245,9 @@
                 listArea.insertAdjacentHTML('beforeend', cardHtml);
             });
         }
+
+        // 앱 시작!
+        initApp();
     </script>
 </body>
 </html>
